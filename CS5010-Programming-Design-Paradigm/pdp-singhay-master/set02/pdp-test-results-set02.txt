@@ -1,0 +1,234 @@
+PDP Test Report for set02
+
+
+Test Name: editor-tests
+Definitions:
+	(define LEFT "left")
+	(define RIGHT "right")
+	(define TAB "\t")
+	(define BACKSPACE "\b")
+
+Test Case: 
+  (test-equal?
+   "editor.rkt: starting with editor '' '' and inputting d and LEFT should produce editor '' 'd'"
+   (editor-post (edit (edit (make-editor "" "") "d") LEFT))
+   "d")
+Test Result: Failure
+actual : 
+expected : d
+expression : (check-equal? (editor-post (edit (edit (make-editor  ) d) LEFT)) d)
+params : ( d)
+
+Test Case: 
+  (test-equal?
+   "editor.rkt: starting with editor 'der' 'sign' and inputting BACKSPACE and RIGHT should produce editor 'des' 'ign'"
+   (editor-pre (edit (edit (make-editor "der" "sign") BACKSPACE) RIGHT))
+   "des")
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "editor.rkt: starting with editor '' '' and inputting RIGHT, a, TAB, BACKSPACE, BACKSPACE and l should produce editor 'l' ''"
+   (edit
+    (edit
+     (edit (edit (edit (edit (make-editor "" "") RIGHT) "a") TAB) BACKSPACE)
+     BACKSPACE)
+    "l")
+   (make-editor "l" ""))
+Test Result: Failure
+actual : #(struct:editor  )
+expected : #(struct:editor l )
+expression : (check-equal? (edit (edit (edit (edit (edit (edit (make-editor  ) RIGHT) a) TAB) BACKSPACE) BACKSPACE) l) (make-editor l ))
+params : (#(struct:editor  ) #(struct:editor l ))
+
+
+Results for Suite editor-tests:
+  Test Successes: 1
+  Test Failures: 2
+  Test Errors: 0
+
+Raw Score: 1/3
+Normalized Score: 5/15
+
+
+Test Name: fsm-tests
+Definitions:
+
+Test Case: 
+  (test-equal?
+   "fsm.rkt: string 'ac' should not be accepted by the machine"
+   (accepting-state? (next-state (next-state (initial-state 0) "a") "c"))
+   false)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "fsm.rkt: string 'bbacadf' should be accepted by the machine"
+   (accepting-state?
+    (next-state
+     (next-state
+      (next-state
+       (next-state
+        (next-state (next-state (next-state (initial-state 0) "b") "b") "a")
+        "c")
+       "a")
+      "d")
+     "f"))
+   true)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "fsm.rkt: string 'bccd' should put the machine in the error state"
+   (error-state?
+    (next-state
+     (next-state (next-state (next-state (initial-state 0) "b") "c") "c")
+     "d"))
+   true)
+Test Result: Success
+
+
+Results for Suite fsm-tests:
+  Test Successes: 3
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 3/3
+Normalized Score: 15/15
+
+
+Test Name: coffee-machine-tests
+Definitions:
+	(define MACHINE (initial-machine 2 5))
+
+Test Case: 
+  (test-equal?
+   "coffee-machine.rkt: after inserting 200 cents and selecting 'coffee', MACHINE should have 1 remaining coffee cup"
+   (machine-remaining-coffee
+    (machine-next-state (machine-next-state MACHINE 200) "coffee"))
+   1)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "coffee-machine.rkt: after inserting 70 cents, selecting 'hot chocolate' and then selecting 'change', MACHINE should output 10"
+   (machine-output
+    (machine-next-state (machine-next-state MACHINE 70) "hot chocolate")
+    "change")
+   10)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "coffee-machine.rkt: after inserting 100 cents and selecting 'coffee', MACHINE should output 'Nothing'"
+   (machine-output (machine-next-state MACHINE 100) "coffee")
+   "Nothing")
+Test Result: Success
+
+
+Results for Suite coffee-machine-tests:
+  Test Successes: 3
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 3/3
+Normalized Score: 15/15
+
+
+Test Name: probe-tests
+Definitions:
+	(define INITIAL-PROBE (probe-at 0 0))
+	(define PROBE-WEST (probe-turned-left INITIAL-PROBE))
+	(define PROBE-SOUTH (probe-turned-left PROBE-WEST))
+	(define PROBE-EAST (probe-turned-right INITIAL-PROBE))
+	(define PROBE-FORWARD-12-NORTH (probe-at 0 -12))
+	(define PROBE-FORWARD-23-EAST (probe-turned-right (probe-at 23 0)))
+	(define PROBE-NORTH-WALL (probe-at 0 -153))
+	(define PROBE-EAST-WALL (probe-turned-right (probe-at 153 0)))
+	(define PROBE-SOUTH-EAST-WALL (probe-turned-right (probe-at 153 153)))
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: the initial probe should be facing north"
+   (probe-north? INITIAL-PROBE)
+   true)
+Test Result: Error
+image=?: expects type <image> as 1st argument, given: (probe 0 0 (object:image% ...)); other arguments were: (object:image% ...)
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: after a left turn, the initial probe should be facing west"
+   (probe-west? PROBE-WEST)
+   true)
+Test Result: Error
+image=?: expects type <image> as 1st argument, given: (probe 0 0 (object:image% ...)); other arguments were: (object:image% ...)
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: after a left turn, a probe facing west should be facing south"
+   (probe-south? PROBE-SOUTH)
+   true)
+Test Result: Error
+image=?: expects type <image> as 1st argument, given: (probe 0 0 (object:image% ...)); other arguments were: (object:image% ...)
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: after a right turn, the initial probe should be facing east"
+   (probe-east? PROBE-EAST)
+   true)
+Test Result: Error
+image=?: expects type <image> as 1st argument, given: (probe 0 0 (object:image% ...)); other arguments were: (object:image% ...)
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: after moving forward the distance 12, initial probe should be at coordinates (0,-12)"
+   (probe-forward INITIAL-PROBE 12)
+   PROBE-FORWARD-12-NORTH)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: after moving forward the distance 23, PROBE-EAST should be at coordinates (23, 0)"
+   (probe-forward PROBE-EAST 23)
+   PROBE-FORWARD-23-EAST)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: moving forward the distance 190 would make INTIAL-PROBE sense the north wall of the trap, so it should stop at coordinates (0,-153)"
+   (probe-forward INITIAL-PROBE 190)
+   PROBE-NORTH-WALL)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: moving forward the distance 160 would make PROBE-EAST sense the east wall of the trap, so it should stop at coordinates (153, 0)"
+   (probe-forward PROBE-EAST 160)
+   PROBE-EAST-WALL)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "probe.rkt: moving forward the distance 154 to the south and then 154 to the east would make INITIAL-PROBE sense the south and then the east walls of the trap, so it should stop at coordinates (153,153)"
+   (probe-forward (probe-turned-left (probe-forward PROBE-SOUTH 154)) 154)
+   PROBE-SOUTH-EAST-WALL)
+Test Result: Success
+
+
+Results for Suite probe-tests:
+  Test Successes: 5
+  Test Failures: 0
+  Test Errors: 4
+
+Raw Score: 5/9
+Normalized Score: 8/15
+
+
+Overall Results:
+  Test Successes: 12
+  Test Failures: 2
+  Test Errors: 4
+
+Raw Score: 12/18
+Normalized Score: 11/15
+

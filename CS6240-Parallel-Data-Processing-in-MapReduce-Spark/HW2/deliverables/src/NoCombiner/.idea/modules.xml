@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../InMapperCombiner/InMapperCombiner.iml" filepath="$PROJECT_DIR$/../InMapperCombiner/InMapperCombiner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NoCombiner.iml" filepath="$PROJECT_DIR$/NoCombiner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../WithCombiner/WithCombiner.iml" filepath="$PROJECT_DIR$/../WithCombiner/WithCombiner.iml" />
+    </modules>
+  </component>
+</project>

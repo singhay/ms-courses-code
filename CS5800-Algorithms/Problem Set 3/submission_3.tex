@@ -1,0 +1,522 @@
+%%Do not change font size
+\documentclass[12pt]{article}
+\usepackage{amsthm,amssymb,fullpage,listings,color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\begin{document}
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+Fall '15 CS 5800 Algorithms \hspace{5cm} Hackerrank Group: akashsingh245\\
+{\bfseries \large Problem Set 3}\\
+Surekha Jadhwani, Akash Singh, and Ayush K. Singh\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Part A}
+\textbf{\large{Answers}}
+\begin{enumerate}
+\item Given a connected undirected graph $G = (V, E)$ such that $|E| > n$, and $w : E → (1, \infty)$ be a $one-to-one$ weight function on the edges of $G$. (i.e., $w(e) > 1$ for every $e \in E$; and $w(e) \ne w(e')$, for every $e,e' \in E$ such that $e \ne e'$). In this framework, the weights of the edges are determined by querying $w$ on the respective edges. By defining different weight functions, we can ask questions about G with respect to these different weight functions.\\
+Let $w' =w(e) - 1$ and let $w''(e)=w(e)/2$, for every $e \in E$.
+\begin{enumerate}
+\item Prove that there exists exactly one $MST$ of $G(V,E)$ with respect to $w$; exactly one $MST$ of $G(V,E)$ with respect to $w'$; and exactly one $MST$ of $G(V,E)$ with respect to $w''$.\\
+\textbf{Solution:} \\
+\textbf{Given:} $w : E → (1, \infty)$ is a $one-to-one$ weight function on the edges of graph $G$.\\
+ \verb|		|\verb|		|\verb|		|\verb|		|\verb|		|\verb|		| $w' =w(e) - 1$, $w'$\\
+ \verb|		|\verb|		|\verb|		|\verb|		|\verb|		|\verb|		| $w''(e)=w(e)/2$ \\
+\textbf{To Prove:} There exists a unique $MST$ of $G(V,E)$ with respect to $w$, one $MST$ of $G(V,E)$ with respect to $w'$ and one $MST$ of $G(V,E)$ with respect to $w''$.\\
+\textbf{Proof:} Proof by contradiction:\\
+\begin{enumerate}
+\item For edge function $w$:\\
+Assume that there exists two distinct minimum spanning trees $m_1$ and $m_2$ for graph $G$ with respect to weight function $w$.\\
+Let $e_1$ be a minimum weight edge that is present only in $m_1$ and not in $m_2$ as both are distinct and have equal number of edges.\\
+If edge $e_1$ is added to  $m_2$, then $m_2$ will contain a cycle. \\
+Let $e_2$ be one of the edges present only in $m_2$ which is forming a cycle with the addition of $e_1$.\\
+Since, $w$ is a one-to-one function, we have, $w(e_1) < w(e_2)$.\\
+Let $m$ be the new spanning tree which is created when $e_1$ is added to $m_2$ and $e_2$ is removed from it.\\
+This implies that the total weight of $m$ is less than the total weight of $m_2$.\\
+This is a contradiction as $m_2$ was supposed to be a minimum spanning tree.\\
+Hence, there exists exactly one $MST$ of $G(V,E)$ with respect to $w$.\\
+\item For edge function $w'$:\\
+Since, $w : E → (1, \infty)$ is a $one-to-one$ weight function on the edges of graph $G$.\\
+$w' =w(e) - 1$ for every $e \in E$, $w'$ is also a $one-to-one$ weight function on the edges of graph $G$ as subtracting 1 from a set of distinct numbers results in another set of distinct numbers.\\
+Hence, from point $(i)$ above, we can conclude that, there exists exactly one $MST$ of $G(V,E)$ with respect to $w'$.\\ 
+\item For edge function $w''$:\\
+Similarly, $w''(e)=w(e)/2$ is also a $one-to-one$ weight function as $w$ is a $one-to-one$ weight function and division by 2 will also result in another $one-to-one$ weight function.\\
+Hence, from point $(i)$ above, we can conclude that, there exists exactly one $MST$ of $G(V,E)$ with respect to $w''$.\\ 
+\end{enumerate}
+\pagebreak
+\item Let $T_w,T_{w'},T_{w''} \subseteq E$ be the $MSTs$ of $G(V,E)$ with respect to $w,w'$ and $w''$. Decide whether each of the following statements are correct. Give a proof if it is true, or a counter example if it is not.
+\begin{enumerate}
+\item $T_{w'} = T_{w''}$.\\
+\textbf{Solution:} The given statement is true.\\
+Proof by contradiction:\\
+Since, $w$ is a one-to-one function, $w'$ and $w''$ are also $one-to-one$ weight functions on the edges of graph $G$.\\
+As, $w' =w(e) - 1$ and $w''(e)=w(e)/2$ , the sequence of edges in increasing order of weight for graph $G$ with respect to $w'$ and $w''$ is same.\\
+Let there exists a minimum weighted edge $e$ of graph $G$.\\
+Now, if $e$ is minimum weighted edge in graph $G$ w.r.t. $w'$, it should be a minimum weighted edge in graph $G$ w.r.t. $w''$.\\
+Assuming, $T_{w'}$ and $T_{w''}$ are distinct $MSTs$ of graph $G$ and edge $e$ is part of $T_{w'}$ but not of $T_{w''}$. \\
+If we add edge $e$ in $T_{w''}$ by removing another edge which forms the cycle, a new spanning tree is created whose total cost is less than $T_{w''}$.\\
+This is a contradiction as $T_{w''}$ is a minimum spanning tree.\\
+Hence, $T_{w'} = T_{w''}$.\\
+  
+\item The minimum cost edge $e_{min}$ belongs to $T_w$ and the maximum cost edge $e_{max}$ does not belong to $T_w$.\\
+\textbf{Solution:} The given statement is partially correct.\\
+For "The minimum cost edge $e_{min}$ belongs to $T_w$": \\
+This statement is always true.\\
+Proof by contradiction:\\
+Suppose that  $e_{min}$ does not belong to $T_w$.\\
+If we add $e_{min}$ to $T_w$ and remove other edge, say $e_1$ which forms a cycle, a new spanning tree is created.\\
+The total weight of this new tree is less than that of $T_w$. \\
+This is a contradiction as $T_w$ is a minimum spanning tree.\\
+Hence, the minimum cost edge $e_{min}$ belongs to $T_w$.\\
+For "The maximum cost edge $e_{max}$ does not belong to $T_w$."\\
+This statement can be true in some cases and false in some cases depending on the graph.\\
+If the graph is already a tree, then all of its edges will be part of MST.\\
+Hence, if $e_{max}$ does not belong to $T_w$, the resulting tree would be disconnected.\\
+In this case, $e_{max}$ belongs to $T_w$.\\
+Thus, the given statement is not correct always.\\
+\end{enumerate}
+\pagebreak
+\item We are given two nodes $u, v \in V$. Assume that there exists exactly one shortest path from $u$ to $v$ in $G$ with respect to $w$; exactly one shortest path from $u$ to $v$ in $G$ with respect to $w'$; and exactly one shortest path from $u$ to $v$ in $G$ with respect to $w''$. Let $P_w(u, v), P_{w'}(u, v), P_{w''}(u, v) \subseteq E$ be these shortest paths from $u$ to $v$ with respect to $w,w'$ and $w''$. Decide whether each of the following statements are correct. Give a proof if it is true, or a counter example if it is not.\\
+\begin{enumerate}
+\item $P_w(u, v) = P_{w'}(u, v).$\\
+\textbf{Solution:} The given statement is true.\\
+Proof by contradiction:\\
+Since, $w' =w(e) - 1$ and $w$ is a one-to-one function, $w'$ is also $one-to-one$ weight function on the edges of graph $G$.\\
+As, $w' =w(e) - 1$, the sequence of edges in increasing order of weight for graph $G$ with respect to $w$ and $w'$ is same.\\
+Let there exists a minimum weighted edge $e$ of graph $G$ on the path from $u$ to $v$.\\
+Now, if $e$ is minimum weighted edge in graph $G$ w.r.t. $w$, it should be a minimum weighted edge in graph $G$ w.r.t. $w'$.\\
+Assuming, $P_{w}(u,v)$ and $P_{w'}(u,v)$ are not equal for graph $G$ and edge $e$ is included in $P_{w}(u,v)$ but not in $P_{w'}(u,v)$. \\
+If we add edge $e$ in $P_{w'}(u,v)$ by removing another edge which forms the cycle, a path is created from $u$ to $v$ whose total cost is less than $P_{w'}(u,v)$.\\
+This is a contradiction as $P_{w'}(u,v)$ is the shortest path from $u$ to $v$ and there exists exactly one shortest path from $u$ to $v$ in graph $G$ w.r.t. $w'$.\\
+Hence, $P_{w}(u,v) = P_{w'}(u,v)$.\\
+\pagebreak
+\item $P_w(u, v) = P_{w''}(u, v).$\\
+\textbf{Solution:} The given statement is true.\\
+Proof by contradiction:\\
+Since, $w'' =w(e)/2$ and $w$ is a one-to-one function, $w''$ is also $one-to-one$ weight function on the edges of graph $G$.\\
+As, $w'' =w(e)/2$, the sequence of edges in increasing order of weight for graph $G$ with respect to $w$ and $w''$ is same.\\
+Let there exists a minimum weighted edge $e$ of graph $G$ on the path from $u$ to $v$.\\
+Now, if $e$ is minimum weighted edge in graph $G$ w.r.t. $w$, it should be a minimum weighted edge in graph $G$ w.r.t. $w''$.\\
+Assuming, $P_{w}(u,v)$ and $P_{w''}(u,v)$ are not equal for graph $G$ and edge $e$ is included in $P_{w}(u,v)$ but not in $P_{w''}(u,v)$. \\
+If we add edge $e$ in $P_{w''}(u,v)$ by removing another edge which forms the cycle, a path is created from $u$ to $v$ whose total cost is less than $P_{w''}(u,v)$.\\
+This is a contradiction as $P_{w''}(u,v)$ is the shortest path from $u$ to $v$ and there exists exactly one shortest path from $u$ to $v$ in graph $G$ w.r.t. $w''$.\\
+Hence, $P_{w}(u,v) = P_{w''}(u,v)$.\\
+\end{enumerate}
+\end{enumerate}
+\pagebreak
+\item Let $G = (V,E)$ be a connected undirected graph, with a weight function $w : E \rightarrow \{1,2\}$. (In other words, all edges of $G$ have weight 1 or 2) Give an efficient $O(|E|)$ algorithm that computes the shortest paths from a single source vertex $s \in V$ to all of the other vertices in the graph $G(V,E)$.\\ 
+\textbf{Solution:} The given graph has edges of weights either 1 or 2. It is possible to split the edge of weight 2 into two edges, each having its weight = 1. If we do this for all the edges of weight 2, we will have a graph that contains edges having weight = 1. On this updated version of the graph, we can implement modified BFS to find the shortest path from source s to all vertices in the graph $G$.  \\
+\textbf{Psuedocode:}\\
+\verb|		|for e in E do\\
+\verb|		|\verb|		|if e.weight = 2\\
+\verb|		|\verb|		|\verb|		|Split e into two edges by creating intermediate vertex in V\\
+\verb|		|\verb|		|end if\\
+\verb|		|end for\\
+\verb|		|Create an integer array Distance[V.size]\\
+\verb|		|for v in V do\\
+\verb|		|\verb|		|Distance[v] $\leftarrow \infty$\\
+\verb|		|\verb|		|Mark vertice v as unvisited\\
+\verb|		|end for\\
+\verb|		|frontier = new Queue() //initialize an empty queue frontier\\
+\verb|		|// Starting BFS for source vertex s\\
+\verb|		|mark s as visited\\
+\verb|		|set Distance[s] = 0\\
+\verb|		|frontier.push(s)\\
+\verb|		|while frontier not empty do\\
+\verb|		|\verb|		|Vertex v' = frontier.pop() \\
+\verb|		|\verb|		|for each successor u of v'\\
+\verb|		|\verb|		|\verb|		|if u unvisited\\
+\verb|		|\verb|		|\verb|		|\verb|		|frontier.push(u)\\
+\verb|		|\verb|		|\verb|		|\verb|		|mark u as visited \\
+\verb|		|\verb|		|\verb|		|\verb|		|Distance[u] = Distance[v'] + 1\\
+\verb|		|\verb|		|\verb|		|end if \\
+\verb|		|\verb|		|end for \\
+\verb|		|end while\\
+\verb|		|output Distance[]\\
+\textbf{Complexity:} Worst-case analysis: \\
+In the worst case scenario, the graph will have all the edges of weight 2. We would need to do $O(|E|)$ operations to split all these edges. Also, the complexity of BFS is $O(|V|+|E|)$. Hence the total time complexity will become $O(|E|) + O(|V|+|E|)$ which is equivalent to $O(|V|+|E|)$.\\
+
+\pagebreak
+\item Given a set of numbers, its $median$, informally, is the “halfway point” of the set. When the set’s size $n$ is odd, the median is unique, occurring at the $i^{th}$ value, where $i = (n + 1)/2$. When $n$ is even, there are two medians, occurring at $i = n/2$ and $i = n/2 + 1$, which are called the “lower median” and “upper median”, respectively. For simplicity in this question, we use the phrase ”the median” to refer to the lower median.\\
+Design and implement a data structure $\mathcal{D}$ to maintain a set of positive integers that supports $Build, Insert, Extract_X$ and $Plot_X$ (for $X \in \{min,max,median\})$ opera- tions, defined as follows:\\
+\begin{itemize}
+\item  $Build_{\mathcal{D}}(S)$: Produces, in linear time, a data structure $\mathcal{D}$ for the set $S$ from an unordered input array. (For implementing $Build_{\mathcal{D}}(S)$, you can use Procedure $Find − Med(S)$, which finds the median of $S$ in linear time.)
+\item $Insert(\mathcal{D}, x)$: insert element $x$ into $\mathcal{D}$ in $O(log n)$ time.
+\item $Plot_{min}(\mathcal{D}),Plot_{max}(\mathcal{D}),Plot_{median}(\mathcal{D})$: Returns, in $O(1)$ time, the value of the minimum, maximum and the median of $\mathcal{D}$, respectively.
+\item $Extract_{min}(\mathcal{D}), Extract_{max}(\mathcal{D}), Extract_{median}(\mathcal{D})$: Remove and return, in $O(log n)$ time, the value of the minimum, maximum and the median of $\mathcal{D}$, respectively. (Note that you will be removing and returning exactly one of these, depending on which of the three parameters $Extract$ was called with.)\\
+\textbf{Solution:} \\
+\textbf{Design:} In order to implement the given functionality, we can use 'min-max-median' heap variant.\\
+In this heap, 
+\begin{enumerate}
+\item The root element represents the median value.
+\item All the elements smaller than median value are stored in left sub-tree in the form of a min-heap
+\item All the elements larger than median value are stored in right sub-tree in the form of a max-heap
+\end{enumerate}
+The maximum size of left subtree($H_{min}$) is $\lfloor (n/2)\rfloor$ and that of right subtree($H_{max}$) is $\lceil (n/2) \rceil$.\\
+\textbf{Implementation of data structure and its operations:}\\
+\textbf{Initialization:} This structure consists of an array which stores the median value in the first element, min value in the second element and max value in the third element.\\
+\verb|		|structure $\mathcal{D}:$\\
+\verb|		|\verb|		|Create an integer array $H[n]$\\
+\pagebreak
+\verb|		|end structure\\
+
+\textbf{$Build_{\mathcal{D}}(S)$:} Here, we first partition the elements into two sets, one for each subtree and then create heaps using those sets.\\
+\verb|		|function $Build_{\mathcal{D}}(S):$\\
+\verb|		|\verb|		|$median = FindMed(S)$\\
+\verb|		|\verb|		|Create two empty arrays $S_{min}[\lfloor n/2 \rfloor]$ and $S_{max}[\lceil n/2 \rceil]$\\
+\verb|		|\verb|		|//Partitioning\\
+\verb|		|\verb|		|for $x$ in $S$:\\
+\verb|		|\verb|		|\verb|		|if $x \geq median$ :\\
+\verb|		|\verb|		|\verb|		|\verb|		|Add $x$ to $S_{max}$\\
+\verb|		|\verb|		|\verb|		|else\\
+\verb|		|\verb|		|\verb|		|\verb|		|Add $x$ to $S_{min}$\\
+\verb|		|\verb|		|\verb|		|end if\\
+\verb|		|\verb|		|end for\\
+\verb|		|\verb|		|//Creating min-max-median heap\\
+\verb|		|\verb|		|$H[1] \leftarrow median$\\
+\verb|		|\verb|		|if $S_{min}.size > 0 $\\
+\verb|		|\verb|		|\verb|		|Create a min-heap from elements of $S_{min}$\\
+\verb|		|\verb|		|\verb|		|Add the min-heap in $H$ starting at location $H[2]$\\
+\verb|		|\verb|		|end if\\
+\verb|		|\verb|		|if $S_{max}.size > 0 $\\
+\verb|		|\verb|		|\verb|		|Create a max-heap from elements of $S_{max}$\\
+\verb|		|\verb|		|\verb|		|Add the max-heap in $H$ starting at location $H[3]$\\
+\verb|		|\verb|		|end if\\
+\verb|		|end function\\
+\textbf{Complexity:} Since, we are iterating through all the numbers once for partitioning,  and then creating heap in linear time, the running time complexity is $O(n)$.\\
+
+\textbf{$Insert(\mathcal{D}, x)$}: After each insertion, we calculate the new median value and try to maintain equal size of both subtrees.\\
+\verb|		|function $Insert(\mathcal{D}, x)$\\
+\verb|		|\verb|		|if $x > H[1]$:\\
+\verb|		|\verb|		|\verb|		|Insert $x$ in right subtree\\
+\verb|		|\verb|		|else\\
+\verb|		|\verb|		|\verb|		|Insert $x$ in left subtree\\
+\verb|		|\verb|		|end if\\
+\verb|		|\verb|		|Reheapify tree and update median value\\
+\verb|		|end function\\
+\textbf{Complexity:} Heap is a binary tree and in worst case, for reheapify, we start from root and come till leaf node. Hence, the running time complexity is $O(logn)$.\\
+
+
+\textbf{$Plot_{min}(\mathcal{D})$:} As per the design, second element of array contains the min-value\\
+\verb|		|function $Plot_{min}(\mathcal{D})$:\\
+\verb|		|\verb|		|if $n$ = 0:\\
+\verb|		|\verb|		|\verb|		|return -1\\
+\verb|		|\verb|		|else if $n$ = 1:\\
+\verb|		|\verb|		|\verb|		|return $H[1]$\\
+\verb|		|\verb|		|else \\
+\verb|		|\verb|		|\verb|		|return $H[2]$\\
+\verb|		|\verb|		|end if\\
+\textbf{Complexity:} Since, there are no loops or recursions, running time complexity is $O(1)$.\\
+
+\textbf{$Plot_{max}(\mathcal{D})$:} As per the design, third element of array contains the max-value\\
+\verb|		|function $Plot_{max}(\mathcal{D})$:\\
+\verb|		|\verb|		|if $n$ = 0:\\
+\verb|		|\verb|		|\verb|		|return -1\\
+\verb|		|\verb|		|else if $n$ = 1:\\
+\verb|		|\verb|		|\verb|		|return $H[1]$\\
+\verb|		|\verb|		|else \\
+\verb|		|\verb|		|\verb|		|return $H[3]$\\
+\verb|		|\verb|		|end if\\
+\textbf{Complexity:} Since, there are no loops or recursions, running time complexity is $O(1)$.\\
+
+\textbf{$Plot_{median}(\mathcal{D})$:} As per the design, first element of array contains the median-value\\
+\verb|		|function $Plot_{median}(\mathcal{D})$:\\
+\verb|		|\verb|		|if $n$ = 0:\\
+\verb|		|\verb|		|\verb|		|return -1\\
+\verb|		|\verb|		|else \\
+\verb|		|\verb|		|\verb|		|return $H[1]$\\
+\verb|		|\verb|		|end if\\
+\textbf{Complexity:} Since, there are no loops or recursions, running time complexity is $O(1)$.\\
+
+\textbf{$Extract_{min}(\mathcal{D})$:} Here, we extract the minimum value first and then reheapify the tree to balance it.\\
+\verb|		|function $Extract_{min}(\mathcal{D})$:\\
+\verb|		|\verb|		|Delete $H[2]$\\
+\verb|		|\verb|		|Move $H[n]$ to $H[2]$\\
+\verb|		|\verb|		|Reheapify the tree and update the median value.\\
+\verb|		|end function\\
+\textbf{Complexity:} Heap is a binary tree and in worst case, for reheapify, we start from root and come till leaf node. Hence, the running time complexity is $O(logn)$.\\
+
+\textbf{$Extract_{max}(\mathcal{D})$:} Here, we extract the maximum value first and then reheapify the tree to balance it.\\
+\verb|		|function $Extract_{max}(\mathcal{D})$:\\
+\verb|		|\verb|		|Delete $H[3]$\\
+\verb|		|\verb|		|Move $H[n]$ to $H[3]$\\
+\verb|		|\verb|		|Reheapify the tree and update the median value.\\
+\verb|		|end function\\
+\textbf{Complexity:} Heap is a binary tree and in worst case, for reheapify, we start from root and come till leaf node. Hence, the running time complexity is $O(logn)$.\\
+
+\textbf{$Extract_{median}(\mathcal{D})$:} Here, we extract the minimum or maximum value depending on the size and then reheapify the tree to balance it.\\
+\verb|		|function $Extract_{median}(\mathcal{D})$:\\
+\verb|		|\verb|		|if $H_{max}.size > H_{min}.size$\\
+\verb|		|\verb|		|\verb|		|Delete $H[3]$\\
+\verb|		|\verb|		|\verb|		|Move $H[n]$ to $H[3]$\\
+\verb|		|\verb|		|else\\
+\verb|		|\verb|		|\verb|		|Delete $H[2]$\\
+\verb|		|\verb|		|\verb|		|Move $H[n]$ to $H[2]$\\
+\verb|		|\verb|		|end if\\
+\verb|		|\verb|		|Reheapify the tree and update the median value.\\
+\verb|		|end function\\
+\textbf{Complexity:} Heap is a binary tree and in worst case, for reheapify, we start from root and come till leaf node. Hence, the running time complexity is $O(logn)$.\\
+
+\end{itemize}
+\end{enumerate}
+\pagebreak
+\section{Part B (programming)}
+\begin{enumerate}
+\item \textbf{Preliminary Problem}\\
+Suppose we have a graph $G$, and $T$ is a spanning tree (not necessarily with minimum total weight) of $G$. Consider the following operation $SWAP(T,e1,e2)$, where we re- move $e_1$ from $T$ (conditioned that it is already in $T$) and add $e_2$ to $T$ . If the resulting graph $T' = SWAP(T,e1,e2)$ is also a spanning tree of $G$, then we will call this a $valid$ swapping.\\
+Show that for any pair of spanning trees $T,T'$ of $G$, it is possible to transform $T$ into $T'$ by a sequence of valid swapping operations. (Hint: Show by mathematical induction that this is possible if $T$ and $T'$ differ by $k$ edges)\\
+\textbf{Proof:} By Mathematical Induction:\\
+Let P(n) : It is possible to transform a spanning tree $T$ into another spanning tree $T'$ for a graph $G$ if they differ by $n$ edges.\\
+\textbf{Base case:} For $P(1)$, we have two spanning trees $T$ and $T'$ which differ by 1 edge.\\
+Let $e'$ be that edge which is present in $T'$ but not in $T$.\\
+If we add $e'$ in $T$,  a cycle will be formed as $T$ was already a spanning tree.\\
+Let $e$ be the edge which forms the cycle after addition of $e'$.\\
+We can remove $e$ from the new graph as it is a valid swapping.\\
+After removal of $e$ from the new graph, a spanning tree is created which is equivalent to $T'$.\\
+Hence, $P(1)$ is true.\\
+\textbf{Inductive Step:} Since $P(1)$ is true, we assume $P(n)$ is true.\\
+For $P(n+1)$:  we have two spanning trees $T$ and $T'$ which differ by $(n+1)$ edges.\\
+Let $T_1$ be a sub-tree of $T$ which has 1 edge, say $e$, less than $T$.\\
+Let $T_1'$ be a sub-tree of $T'$ which has 1 edge, say $e'$, less than $T'$.\\
+Since, $T$ and $T'$ differ by $(n+1)$ edges, $T_1$ and $T_1'$ differ by $n$ edges.\\
+By induction hypothesis, we can transform $T_1$ into $T_1'$ using a set of valid swapping operations.\\
+If we add edge $e$ back to $T_1'$, the resulting tree would differ $T'$ by only that edge.\\
+This edge can be replaced with $e'$ which is the cycle forming edge.\\
+Hence, $P(n+1)$ is true.\\
+\textbf{Program:} Below is a sample program which determines whether edge swapping operation for given spanning tree is valid or not.
+
+\lstset{frame=tb,
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstinputlisting{/Users/Surekha/Documents/SpanTreeSWAP.java}
+\textbf{Output:}\\
+\texttt{
+Case 1\\
+Edge Swap is Valid\\
+Case 2\\
+Edge swap is Invalid\\
+Case 3\\
+Edge Swap is Valid\\
+Case 4\\
+Edge Swap is Valid\\
+Case 5\\
+Edge swap is Invalid\\
+}
+
+\pagebreak
+\item Programming Problem:\\
+\\
+\textbf{\large{Group Hackerrank Name: akashsingh245 }}
+\begin{enumerate}
+	\item Surekha Jadhwani : surekha@ccs.neu.edu / jadhwani.s@husky.neu.edu
+	\item Akash Singh : singhaka@ccs.neu.edu / singh.aka@husky.neu.edu
+	\item Ayush K. Singh : singhay@ccs.neu.edu / singh.ay@husky.neu.edu
+\end{enumerate}
+
+\pagebreak
+\item \textbf{Analysis of programming problem algorithm:} Describe and give a proof of correctness for the algorithm you used to solve the programming assignment. (Hint: Use the results from the first problem of Part B)
+
+\textbf{Correctness:}
+\begin{enumerate}
+	\item Termination: As the number of nodes are limited and we are visiting each node just once, the algorithm terminates successfully.
+	\item Correctness: The algorithm gives correct value can be proved as follows:\\
+\textbf{Proof by Induction:} Let $P(k):$ For a k-node graph, it is possible to minimize $bias$ and it can be calculated using the formulae: $(bias = req\_connections$ $mod$ 2) when both maverick and desperado can connect more than half the nodes without forming a cycle independently or $(bias = Math.abs(2 * (req\_conns\_by\_each - desperado\_connectible\_count))) $ for other cases.\\
+\textbf{Base Case:} For P(3):\\
+\texttt{3 3\\
+1 2 MAVERICK\\
+2 3 MAVERICK\\
+1 3 DESPERADO\\}
+In the above case, we can connect 1 Desperado edge without forming a cycle and 2 maverick edges without forming a cycle. As we know that we can swap the edges to transform one spanning tree to another and that a spanning tree always exists such that it connects all distribution centers, we can use the formula $(bias = req\_connections$ $mod$ 2) to compute the minimum $bias.$\\
+Both these values are greater or equal to 1 (which is $(n - 1) / 2)$. \\
+Thus $bias$ is 2 $mod$ 2 = 0 using the formula used in the program $(bias = req\_connections$ $mod$ 2).\\
+Hence this base case is true.\\
+Considering another case as an extension to the above case:$P(4)$\\
+\texttt{4 4\\
+1 2 MAVERICK\\
+2 3 MAVERICK\\
+4 3 MAVERICK\\
+1 3 DESPERADO\\}
+In above case, we can connect 3 maverick edges without a cycle but only 1 desperado edge without a cycle and hence bias by using the formula in the program \\
+\verb|			|$(bias = Math.abs(2 * (req\_conns\_by\_each - desperado\_connectible\_count))) $\\
+is 1, which is yet again true. In this case, we can connect the firm which can cater lesser contracts and form the remainder of the tree using the contracts of the other firm with higher bias. As we know, we can join any two vertices of disconnected subtrees of the same graph without creating a cycle, the above is true. \\
+\textbf{Induction step:}\\
+Given that the scenarios like above are true, we will assume $P(k)$ is true.\\
+Now we need to prove this for $P(k+1)$.\\
+As $k$-node graph is a spanning tree and if we add a new node, only one more edge is needed to connect to it. \\
+If we have more than or equal to half of the edges needed to connect the centers and the new node can be connected using a desperado edge only, then it is possible to swap some other edge of desperado with maverick if bias is going in favor of desperado and hence the formula $((n - 1) mod 2)$ will still give the right answer.\\
+Else, if one of the edges that the firm can connect without forming a cycle in its own contracts are less than the half of the required connections, and if the new edge is say of the firm having lower contracts, then the formula used in the program will reduce the bias correctly. \\
+This will happen because it uses the number of contracts the firm can furnish without forming a cycle, and as the new node is also a contract without a cycle, it will be added to the previous value of contracts the firm had. \\
+And if the firm with the higher contracts is again the only option to connect to the new center, then the formula will keep the contracts of firm with lower contracts as is and the bias will get increased.\\
+Since we previously proved that it is true for $P(k)$ and adding a new edge, updates the bias correctly, we know that we are getting the right output for $P(k+1)$. Hence this ensures the correctness of the program.
+\end{enumerate}
+
+\textbf{Complexity:}\\We are iterating through all the contracts and using $union-find$ data structure within it, and hence the complexity is of the form $O(mlogn)$. Hence the worst case complexity is $O(mlogn)$.
+
+\pagebreak
+\item \textbf{Finding the tree:} For the programming assignment, we only asked that you compute the value of the minimum possible bias, instead of finding a set of contracts that achieves it. Give and analyze an algorithm which finds and returns a set of valid contracts which achieve the minimum possible bias.
+
+\textbf{Algorithm:}\\
+\verb|		|//Develop a data structure link cut tree which has the following operations:\\
+\verb|		|$link(v, u) \leftarrow $ Link vertices v and u to show that they are connected by an edge\\
+\verb|		|$cut(v, u) \leftarrow$ Remove the edge between the vertices $v$ and $u$\\
+\verb|		|$areConnected?(v, u) \leftarrow$ True iff $u$ is reachable from $v$ via a connected path\\
+\verb|		|//Once the data structure is developed, use it to find the tree as follows:\\
+\verb|		|Begin\\
+\verb|		|Create 4 arrays to store the $maverick\_result\_edges[], desperado\_result\_edges[],\\ maverick\_non\_result-edges[]$ and $desperado\_non\_result\_edges[]$\\
+\verb|		|For all the $c$ contracts \\
+\verb|		|\verb|		|If $maverick\_edge$\\
+\verb|		|\verb|		|\verb|		|Add to $maverick\_non\_result\_edges[]$\\
+\verb|		|\verb|		|Else\\
+\verb|		|\verb|		|\verb|		|Add to $desperado\_non\_result\_edges[]$\\
+\verb|		|\verb|		|end if\\
+\verb|		|End for\\
+\verb|		|Initialize $rem\_edges$ to $n (no\_of\_distribution\_centers) - 1$\\
+\verb|		|Init Flags $maverick\_flag$ and $desperado\_flag$ to $true$ which will indicate whether a $maverick\_non\_result\_edge$ or $desperado\_non\_result\_edge$ can be connected without forming a cycle \\
+\verb|		|While $(remaining\_edges\_counter > 0)$\\
+\verb|		|// Try to add an edge of desperado and an edge of maverick at a time to keep $bias$ min\\
+\verb|		|// if connecting edge of one without a cycle is not possible, form tree using edges of other \\
+\verb|		|\verb|		|If $((bias >= 0$ or $!maverick\_flag$) and $desperado\_flag)$\\
+\verb|		|\verb|		|\verb|		|$Desperado\_flag = false$\\
+\verb|		|\verb|		|\verb|		|For all $non\_result\_desperado\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|If $(!areConnected$(vertices of the current desperado edge))\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$Link$(Vertices of current edge)\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current edge to $desperado\_result\_edges;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current edge from $desperado\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$bias--; rem\_edges--; desperado\_flag = true;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Break;\\
+\verb|		|\verb|		|\verb|		|\verb|		|End if\\
+\verb|		|\verb|		|\verb|		|End for\\
+\verb|		|\verb|		|End if\\
+\verb|		|\verb|		|Else If $((bias < 0$ or $!desperado\_flag)$ and $maverick_flag)$\\
+\verb|		|\verb|		|\verb|		|$Maverick\_flag = false;$\\
+\verb|		|\verb|		|\verb|		|For all $non\_result\_maverick\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|If $(!areConnected$(vertices of the current maverick edge))\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$Link$(Vertices of current edge)\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current edge to $maverick\_result\_edges;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current edge from $maverick\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$bias++; rem\_edges--; maverick\_flag = true;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Break;\\
+\verb|		|\verb|		|\verb|		|\verb|		|End if\\
+\verb|		|\verb|		|\verb|		|End for\\
+\verb|		|\verb|		|End if\\
+\verb|		|End while\\
+\verb|		|// Tree formed, Reduce bias\\
+\verb|		|If $(current\_bias > 0)$\\
+\verb|		|// try swapping currently connected maverick edge with an unconnected desperado edge\\
+\verb|		|\verb|		|For all $Maverick\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|For all $desperado\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|If $SWAP(current\_maverick\_edge, current\_desperado\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Cut (vertices of $current\_maverick\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Link (vertices of $current\_desperado\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current desperado edge to $desperado\_result\_edges;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current desperado edge from $desperado\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current maverick edge to $maverick\_non\_result\_edges;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current maverick edge from $maverick\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$bias -=2$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|If $(bias <=0)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Break outer\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|End If\\
+\verb|		|\verb|		|\verb|		|\verb|		|End If\\
+\verb|		|\verb|		|\verb|		|End for\\
+\verb|		|\verb|		|End for\\
+\verb|		|\verb|		|Else If $(current\_bias < 0)$\\
+\verb|		|\verb|		|// try swapping currently connected desperado edge with an unconnected maverick edge\\
+\verb|		|\verb|		|\verb|		|For all $Desperado\_result\_edges$\\ 
+\verb|		|\verb|		|\verb|		|\verb|		|For all $maverick\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|If $SWAP(current\_maverick\_edge, current\_desperado\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Cut (vertices of $current\_desperado\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Link (vertices of $current\_maverick\_edge)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current maverick edge to $maverick\_result\_edges;$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current maverick edge from $maverick\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Add current desperado edge to $desperado\_non\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Remove current desperado edge from $desperado\_result\_edges$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|$bias +=2\\$
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|If $(bias >=0)$\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|Break outer\\
+\verb|		|\verb|		|\verb|		|\verb|		|\verb|		|End If\\
+\verb|		|\verb|		|\verb|		|\verb|		|End If\\
+\verb|		|\verb|		|\verb|		|End for\\
+\verb|		|\verb|		|End for\\
+\verb|		|end if\\
+
+\textbf{Correctness:}
+\begin{enumerate}
+	\item Termination:
+	The algorithm terminates as we have a limited number of contracts and the loops are based upon: 
+	\begin{enumerate}
+		\item The count of contracts where at max we have two loops, which are somehow based upon the contract count and we don’t revisit any edge in the same loop again. Hence we can say that the program terminates for this case.
+		\item Or on the condition that MST is formed and it is given that the input is such that at least one MST is present for the given graph and hence the program will terminate.
+	\end{enumerate}
+	\item Correctness: We first form the minimum spanning tree using a modified version of Kruskal’s algorithm and then try to reduce the bias by trying to $SWAP$ edges where the condition that the cycle is not formed in the graph. We try to replace all the possible edges of the company with higher $bias$ with the ones currently having lesser contracts till we get a minimum $bias$ and hence we know that the final result is correct.
+\end{enumerate} 
+
+\textbf{Complexity:}\\The largest order of computation in the program is when we are trying to compute the swapping operations. In worst case, number of connected edges is  $O(n)$ and the edges of the other firm which are not connected of the  $O(m)$. Link cut tree is also being used within the loop of $(m * n)$ which adds the complexity of  $O(logn)$. Hence the total running time complexity in the worst case will be $O (mnlog n)$. 
+
+
+\textbf{Program:}\\ Below mentioned is a sample program for the given requirement.\\
+
+\lstset{frame=tb,
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstinputlisting{/Users/Surekha/Downloads/SolutionLinkCutNew.java}
+\textbf{Input:}\\
+\texttt{
+	7 9\\
+	1 2 MAVERICK\\
+	1 3 MAVERICK\\
+	2 3 DESPERADO\\
+	2 4 MAVERICK\\
+	3 5 MAVERICK\\
+	4 5 DESPERADO\\
+	4 6 MAVERICK\\
+	5 7 MAVERICK\\
+	6 7 MAVERICK\\
+}
+\textbf{Output:}\\
+\texttt{
+	2\\
+	1 2 MAVERICK\\
+	2 4 MAVERICK\\
+	4 6 MAVERICK\\
+	5 7 MAVERICK\\
+	2 3 DESPERADO\\
+	4 5 DESPERADO\\
+}
+\end{enumerate}
+
+\end{document}

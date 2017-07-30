@@ -1,0 +1,19 @@
+Features
+	present-without-count
+	P34 is from Rocky Mountain Obs. so should be weighed heavily
+	Add feature to related LAT/LONG with country/state
+
+
+- Weed out data that is not in line with the distribution of the unlabelled data
+- Check Noise
+- Find Outliers using autoencoders (deeplearning)
+- Select Attributes
+- Normalize: should always apply before starting clustering to avoid larger parameters from overshadowing
+- Discretize
+- Missing Values
+- Remove Outliers: LOF/Binomial
+- Binning
+- Pivot: Rename by Replacing
+- Macros and Sampling 
+- Make sure to normalize, etc to test data
+- Repeating subprocess: to balance classes in cases where a few very large classes dominate some minority cases.

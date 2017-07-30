@@ -1,0 +1,12 @@
+TA Name:- Hemanth
+Helper Name:- Abhilash
+
+Design Grade:- AB
+Presentation Grade:- A
+Correctness Score:- 15
+
+Notes:-
+strategy incorrect - "general function “ - should be combining simpler function
+Strategies incorrect for many other functions - should be template on list but used calling more general function
+add-new-pre-section : function complex
+ListOfDailyRainfallAmts : Template incorrect

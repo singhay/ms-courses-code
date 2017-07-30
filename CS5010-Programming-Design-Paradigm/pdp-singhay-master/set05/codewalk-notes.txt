@@ -1,0 +1,5 @@
+1. Missing template for ListOf<X>.
+
+D: A
+P: A
+C: 15/15

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SequentualConcurrentDataAnalysis:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SequentualConcurrentDataAnalysis_jar</output-path>
+    <root id="archive" name="SequentualConcurrentDataAnalysis.jar">
+      <element id="module-output" name="SequentualConcurrentDataAnalysis" />
+    </root>
+  </artifact>
+</component>

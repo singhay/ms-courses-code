@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="mapreduce">
+    <CLASSES>
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/mapreduce" />
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/yarn" />
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/common" />
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/hdfs" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/common/jdiff" />
+      <root url="file://$USER_HOME$/hadoop/share/hadoop/hdfs/jdiff" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/hadoop/share/hadoop/common" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/hadoop/share/hadoop/hdfs" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/hadoop/share/hadoop/mapreduce" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/hadoop/share/hadoop/yarn" recursive="false" />
+  </library>
+</component>

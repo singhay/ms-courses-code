@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WithCombiner:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts</output-path>
+    <root id="archive" name="WithCombiner.jar">
+      <element id="module-output" name="WithCombiner" />
+      <element id="extracted-dir" path="/usr/lib/jvm/jdk1.8.0_111/lib/tools.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

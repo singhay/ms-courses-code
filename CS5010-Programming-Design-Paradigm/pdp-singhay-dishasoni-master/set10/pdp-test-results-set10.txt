@@ -1,0 +1,191 @@
+PDP Test Report for set10
+
+
+Test Name: toys-tests
+Definitions:
+	(define TOY-X 370)
+	(define TOY-Y 100)
+	(define SQUARE-SPEED 100)
+	(define SQUARE-TOY (make-square-toy TOY-X TOY-Y SQUARE-SPEED))
+	(define THROBBER-TOY (make-throbber TOY-X TOY-Y))
+	(define CLOCK-TOY (make-clock TOY-X TOY-Y))
+	(define FOOTBALL-TOY (make-football TOY-X TOY-Y))
+	(define WORLD (make-playground SQUARE-SPEED))
+
+Test Case: 
+  (test-equal?
+   "Test#1: Square should move right"
+   (local () (send SQUARE-TOY after-tick) (send SQUARE-TOY toy-x))
+   (+ TOY-X SQUARE-SPEED))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#2: Square Y should not change"
+   (send SQUARE-TOY toy-y)
+   TOY-Y)
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#3: Throbber should expand"
+   (<
+    (send THROBBER-TOY toy-data)
+    (local () (send THROBBER-TOY after-tick) (send THROBBER-TOY toy-data))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#4: Clock should increment the tick count"
+   (<
+    (send CLOCK-TOY toy-data)
+    (local () (send CLOCK-TOY after-tick) (send CLOCK-TOY toy-data))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#5: Football should contract"
+   (>
+    (send FOOTBALL-TOY toy-data)
+    (local () (send FOOTBALL-TOY after-tick) (send FOOTBALL-TOY toy-data))))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#6: Square should be restricted on right edge"
+   (local () (send SQUARE-TOY after-tick) (send SQUARE-TOY toy-x))
+   480)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#7: Square Y should not change"
+   (send SQUARE-TOY toy-y)
+   TOY-Y)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#8: target-x should be 350 after smooth drag"
+   (local
+    ()
+    (send WORLD after-button-down 245 295)
+    (send WORLD after-drag 345 395)
+    (send WORLD target-x))
+   350)
+Test Result: Failure
+actual : 250
+expected : 350
+expression : (check-equal? (local () (send WORLD after-button-down 245 295) (send WORLD after-drag 345 395) (send WORLD target-x)) 350)
+params : (250 350)
+
+Test Case: 
+  (test-equal?
+   "Test#9: target-y should be 400 after smooth drag"
+   (send WORLD target-y)
+   400)
+Test Result: Failure
+actual : 300
+expected : 400
+expression : (check-equal? (send WORLD target-y) 400)
+params : (300 400)
+
+Test Case: 
+  (test-equal?
+   "Test#10: 1 toy should have been created"
+   (local
+    ()
+    (send WORLD after-key-event "s")
+    (send WORLD after-key-event "t")
+    (send WORLD after-key-event "w")
+    (send WORLD after-key-event "f")
+    (length (send WORLD get-toys)))
+   4)
+Test Result: Success
+
+
+Results for Suite toys-tests:
+  Test Successes: 8
+  Test Failures: 2
+  Test Errors: 0
+
+Raw Score: 8/10
+Normalized Score: 12/15
+
+
+Test Name: cubelets-tests
+Definitions:
+	(define C1 (make-block 30 30 '()))
+	(define C2 (make-block 60 60 (list C1)))
+	(define C3 (make-block 90 90 (list C1 C2)))
+	(define C4 (make-block 120 120 (list C1 C2 C3)))
+
+Test Case: 
+  (test-equal?
+   "Test#1: Cube should move"
+   (local
+    ()
+    (send C1 after-button-down 35 35)
+    (send C1 after-drag 95 95)
+    (send C1 block-x))
+   90)
+Test Result: Success
+
+Test Case: 
+  (test-equal? "Test#2: Cube should move" (local () (send C1 block-y)) 90)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#3: add Teammates"
+   (local
+    ()
+    (send C1 add-teammate C2)
+    (send C1 add-teammate C3)
+    (length (send C1 get-team)))
+   2)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#4: add Teammates Complex 1"
+   (local () (send C3 add-teammate C4) (length (send C4 get-team)))
+   3)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#5: add Teammates Complex 2"
+   (local () (length (send C3 get-team)))
+   3)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#6: add Teammates Complex 3"
+   (local () (length (send C1 get-team)))
+   3)
+Test Result: Failure
+actual : 2
+expected : 3
+expression : (check-equal? (local () (length (send C1 get-team))) 3)
+params : (2 3)
+
+
+Results for Suite cubelets-tests:
+  Test Successes: 5
+  Test Failures: 1
+  Test Errors: 0
+
+Raw Score: 5/6
+Normalized Score: 13/15
+
+
+Overall Results:
+  Test Successes: 13
+  Test Failures: 3
+  Test Errors: 0
+
+Raw Score: 13/16
+Normalized Score: 12/15
+

@@ -1,0 +1,143 @@
+PDP Test Report for set03
+
+
+Test Name: screensaver-1-tests
+Definitions:
+	(define PAUSE-KEY " ")
+	(define INITIAL-WORLD (initial-world "Any"))
+	(define UNPAUSED-INITIAL-WORLD (world-after-key-event INITIAL-WORLD PAUSE-KEY))
+	(define RECTANGLE-NEAR-EDGE (new-rectangle 10 10 30 20))
+	(define WORLD-AFTER-10-TICKS
+	  (world-after-tick
+	   (world-after-tick
+	    (world-after-tick
+	     (world-after-tick
+	      (world-after-tick
+	       (world-after-tick
+	        (world-after-tick
+	         (world-after-tick
+	          (world-after-tick (world-after-tick UNPAUSED-INITIAL-WORLD)))))))))))
+	(define WORLD-AFTER-20-TICKS
+	  (world-after-tick
+	   (world-after-tick
+	    (world-after-tick
+	     (world-after-tick
+	      (world-after-tick
+	       (world-after-tick
+	        (world-after-tick
+	         (world-after-tick
+	          (world-after-tick (world-after-tick WORLD-AFTER-10-TICKS)))))))))))
+
+Test Case: 
+  (test-equal? "TC#1: Initial world is paused?" (world-paused? INITIAL-WORLD) #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#2: Can we unpause the world?"
+   (world-paused? UNPAUSED-INITIAL-WORLD)
+   #f)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#3: Rect1 x-co ord after tick"
+   (rect-x (world-rect1 (world-after-tick UNPAUSED-INITIAL-WORLD)))
+   (+ 200 -12))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#4: Rect1 y-co ord after tick"
+   (rect-y (world-rect1 (world-after-tick UNPAUSED-INITIAL-WORLD)))
+   (+ 100 20))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#5: vx reversed?"
+   (rect-vx (world-rect1 WORLD-AFTER-20-TICKS))
+   12)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#6: vy reversed?"
+   (rect-vy (world-rect1 WORLD-AFTER-10-TICKS))
+   -20)
+Test Result: Success
+
+
+Results for Suite screensaver-1-tests:
+  Test Successes: 6
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 6/6
+Normalized Score: 15/15
+
+
+Test Name: screensaver-2-tests
+Definitions:
+	(define RECTANGLE-NEAR-EDGE (new-rectangle 35 40 30 20))
+	(define BUTTON-DOWN "button-down")
+	(define BUTTON-UP "button-up")
+	(define DRAG "drag")
+	(define SELECTED-RECTANGLE-NEAR-EDGE
+	  (rect-after-mouse-event RECTANGLE-NEAR-EDGE 32 32 BUTTON-DOWN))
+
+Test Case: 
+  (test-equal?
+   "TC#1: Click outside the rectangle"
+   (rect-selected?
+    (rect-after-mouse-event RECTANGLE-NEAR-EDGE 100 100 BUTTON-DOWN))
+   #f)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#2: Select rectangle"
+   (rect-selected? SELECTED-RECTANGLE-NEAR-EDGE)
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#3: Unselect rectangle"
+   (rect-selected?
+    (rect-after-mouse-event SELECTED-RECTANGLE-NEAR-EDGE 32 32 BUTTON-UP))
+   #f)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#4: Smooth Drag rectangle y-co ord"
+   (rect-y (rect-after-mouse-event SELECTED-RECTANGLE-NEAR-EDGE 60 80 DRAG))
+   88)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#5: Smooth Drag rectangle x-co ord"
+   (rect-x (rect-after-mouse-event SELECTED-RECTANGLE-NEAR-EDGE 60 80 DRAG))
+   63)
+Test Result: Success
+
+
+Results for Suite screensaver-2-tests:
+  Test Successes: 5
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 5/5
+Normalized Score: 15/15
+
+
+Overall Results:
+  Test Successes: 11
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 11/11
+Normalized Score: 15/15
+

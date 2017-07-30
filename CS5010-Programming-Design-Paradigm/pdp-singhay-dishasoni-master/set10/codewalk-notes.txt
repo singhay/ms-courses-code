@@ -1,0 +1,12 @@
+TA Name:- Kesav
+Helper Name:- Ankur
+
+Design Grade:- A
+Presentation Grade:- A (to both)
+Correctness Score:- 12
+
+Notes:
+- all the local constants or functions (eg: updates-football-scale) must have purpose statements
+- Methods with void return type should have EFFECT statements and not RETURN statements
+- lambda should have purpose statements
+- missing parameters for couple of methods in Block class

@@ -1,0 +1,7 @@
+Maximum Toll Profit = t * 24625000000
+No. of tolls between cities A & B = 1000.0
+No. of tolls between cities A & C = 0.0
+No. of tolls between cities A & D = 0.0
+No. of tolls between cities B & C = 250.0
+No. of tolls between cities B & D = 750.0
+No. of tolls between cities D & C = 2250.0

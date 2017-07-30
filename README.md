@@ -1,2 +1,2 @@
 # ms-courses-code
-All code from my Master's in Computer Science at Northeastern University
+All the code written throughout my masters in computer science

@@ -1,0 +1,76 @@
+INTRODUCTION
+-------------------------------------------------------------------------------
+- Prior work on subspace clustering
+  - Iterative: Sensitive to initialization
+  - Algebraic: Sensitive to subspace independence, noise and outliers
+  - Statistical: Need to know the number and dimensions of the subspaces, and are sensitive to initialization which have been addressed via several methods but there is no theoretical proof for the optimality.
+  - Spectral: Have difficulties in dealing with points near the intersection of two subspaces, because the neighborhood of a point can contain points from different subspaces. In addition, they are sensitive to the right choice of the neighborhood size to compute the local information at each point. Global spectral clustering-based approaches try to resolve these
+issues by building better similarities between data points using
+global information. Using advances in sparse representation theory and low-rank recovery algorithms, Sparse Subspace Clustering (SSC), Low-Rank Recovery (LRR), and Low-Rank Subspace Clustering (LRSC) algorithms pose the clustering problem as one of finding a sparse or low-rank representation of the data in the dictionary of the data itself. The solution of the corresponding global optimization algorithm is then used to build a similarity graph from which the segmentation of the data is obtained. The advantages of these methods with respect to most state-of-the-art algorithms are that they can handle noise and outliers in data, and that they do not need to know the dimensions and, in principle, the number of subspaces a priori.
+
+- Contribution
+  - Each data point in a union of subspaces can be efficiently represented as a linear or affine combination of other points.
+  - Ideally from its own subspace
+  - NP-Hard to solve, so relaxed by L1 and proven to be recoverable using convex optimization
+  - Our algorithm can directly deal with noise, sparse outlying entries, and missing entries in the data as well as the more general class of affine subspaces by incorporating the data corruption or subspace model into the sparse optimization program.
+  - Performs better than rest of the algorithms in domain
+
+- Algorithm
+  - Sparse Optimization Problem
+    - The subspace clustering problem refers to the problem of finding the number of subspaces, their dimensions, a basis for each subspace, and the segmentation of the data from Y  
+    - Restrict among the possible infinite solutions by minimizing objective function lQ norm of solution results in subspace-sparse representations.
+    - We study conditions under which the convex optimization program in (5) is guaranteed to recover a subspace-sparse representation of each data point.
+  - Clustering using Sparse Coefficients
+    - An ideal similarity matrix W , hence an ideal similarity graph G, is one in which nodes that correspond to points from the same subspace are connected to each other and there are no edges between nodes that correspond to points in different subspaces.
+    - Symmetrization
+    - We obtain the clustering of data by applying the Kmeans algorithm [11] to the normalized rows of a matrix whose columns are the n bottom eigenvectors of the symmetric normalized Laplacian matrix of the graph.
+
+- Practical Extension
+  - We generalize the SSC algorithm for clustering data lying perfectly in a union of linear subspaces, to deal with the aforementioned challenges.
+  - Handle missing, corrupted, data
+  - Noise and Sparse Outlying Entries by incorporating the corruption model of data into sparse optimization program
+  - Missing entries can be filled with random values, hence obtain data points with sparse outlying entries. Taking into account the position of missing entries, we can synthesize a new only known data matrix and run SSC on it given number of known data is comparatively large w.r.t matrix entries.
+  - Affine subspaces are handled by including additional linear equality constraints
+
+- Sparse Subspace Theory
+  - The underlying assumption for the success of the SSC algorithm is that the proposed optimization program recovers a subspace- sparse representation of each data point, i.e., a representation whose nonzero elements correspond to the subspace of the given point.
+  - We investigate recovery conditions for two classes of subspace arrangements: independent and disjoint subspace models
+  - Independent Subspace Model l-q minimization always recover subspace-sparse representations of the data points give q < infinity.
+  - Disjoint Subspace Model
+  - Geometric Intepretation
+  - the success of the L1 -minimization for subspace-sparse recovery depends on the principal angles between subspaces and the distribution of the data in each subspace.
+
+- Graph Connectivity
+  - We consider a regularization term in the sparse optimization program that promotes connectivity of the points within each subspace. 6 We use the idea that if data points in each subspace choose a few common points from the same subspace in their sparse representations, then they form a single component of the similarity graph.
+
+- Experiments
+  - Synthetic Data - the success of the clustering relies on the success of the L1-minimization in recovering subspace-sparse representations of data points
+  - Real Data
+    - segmenting multiple motions in videos (Fig. 1)
+    - clustering images of human faces
+    - We compare the performance of SSC with the best state-of-the-art subspace clustering algorithms: LSA [22], SCC [28], LRR [38], and LRSC
+  - Results: SSC obtains a small clustering error outper- forming the other algorithms. This suggests that the separation of different motion subspaces in terms of their principal angles and the distribution of the feature trajectories in each motion subspace are sufficient for the success of the sparse optimization program, hence clustering.
+
+  Note that the computational time
+of SCC is drastically higher than other algorithms. This comes
+from the fact that the complexity of SCC increases exponentially
+in the dimension of the subspaces, which in this case is d = 9.
+
+The authors present subspace clustering algorithm based on sparse
+representation techniques, called SSC, that finds a sparse rep-
+resentation of each point in the dictionary of the other points,
+builds a similarity graph using the sparse coefficients, and ob-
+tains the segmentation of the data using spectral clustering. We
+showed that, under appropriate conditions on the arrangement of
+subspaces and the distribution of data, the algorithm succeeds
+in recovering the desired sparse representations of data points.
+A key advantage of the algorithm is its ability to directly deal
+with data nuisances, such as noise, sparse outlying entries, and
+missing entries as well as the more general class of affine
+subspaces by incorporating the corresponding models into the
+sparse optimization program. Experiments on real data such as
+face images and motions in videos showed the effectiveness of
+our algorithm and its superiority over the state of the art.
+
+
+The authors address the problem of clustering collection of data points lying in low dimensional subspaces. Prior work on subspace clustering via iterative, algebraic, statistical methods is sensitive to initialization, subspace independence, noise and outliers while with the recent advancements in sparse representation theory and low-rank recovery algorithms proved to be successful by posing clustering problem as one of finding a sparse or low-rank representation of the data points in the dictionary of the data itself, and using the sparse coefficients to build a similarity graph for segmentation using spectral clustering. The crux of the contribution is to represent each data point using maximal number of other points to reduce computation complexity from its own subspace obtained by applying K Means algorithm and then further relaxing it by L1 to make it recoverable using convex optimization. By incorporating the corruption model of data into sparse optimization program and additional linear equality constraints the algorithm is able to handle data inconsistencies like noise, missing values or corrupted data. Further experiments on synthetic data proves that success of the clustering relies on the success of the L1-minimization in recovering subspace-sparse representations of data points. The algorithm also outperforms several state of the art algorithms in motion segmentation and facial image clustering proving that the separation of different motion subspaces in terms of their principal angles and the distribution of the feature trajectories in each motion subspace are sufficient for the success of the sparse optimization program, hence clustering.

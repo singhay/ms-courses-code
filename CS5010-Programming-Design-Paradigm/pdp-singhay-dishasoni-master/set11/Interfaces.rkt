@@ -1,0 +1,158 @@
+#lang racket
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; PROVIDE FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(provide SWidget<%> Controller<%> Model<%>
+         CANVAS-WIDTH
+         CANVAS-HEIGHT
+         HALF-CANVAS-WIDTH
+         HALF-CANVAS-HEIGHT
+         EMPTY-CANVAS
+         NEW-POS-CONTR-KEY
+         NEW-VEL-CONTR-KEY 
+         NEW-X-CONTR-KEY
+         NEW-Y-CONTR-KEY
+         NEW-XY-CONTR-KEY
+         UP-KEY-EVENT
+         DOWN-KEY-EVENT
+         LEFT-KEY-EVENT
+         RIGHT-KEY-EVENT
+         BUTTON-DOWN
+         DRAG
+         BUTTON-UP
+         PARTICLE-AREA-WIDTH
+         PARTICLE-AREA-HEIGHT
+         CONTROLLER-PADDING
+         CIRCLE-RADIUS
+         PARTICLE-RADIUS
+         CONTROLLER-WIDTH
+         CONTROLLER-HEIGHT
+         SOLID-MODE
+         OUTLINE-MODE
+         BLACK-COLOR
+         RED-COLOR
+         BLUE-COLOR)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; GLOBAL CONSTANTS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Constants for Canvas
+(define CANVAS-WIDTH 600)
+(define CANVAS-HEIGHT 500)
+(define HALF-CANVAS-WIDTH 300)
+(define HALF-CANVAS-HEIGHT 250)
+(define EMPTY-CANVAS (empty-scene CANVAS-WIDTH CANVAS-HEIGHT))
+
+;; Controller Dimensions
+(define CONTROLLER-WIDTH 60)
+(define CONTROLLER-HEIGHT 60)
+(define SOLID-MODE "solid")
+(define OUTLINE-MODE "outline")
+(define BLACK-COLOR "black")
+(define RED-COLOR "red")
+(define BLUE-COLOR "blue")
+
+;; Constants for particle area
+(define PARTICLE-AREA-WIDTH 150)
+(define PARTICLE-AREA-HEIGHT 100)
+(define CONTROLLER-PADDING 30)
+(define PARTICLE-RADIUS 2)
+(define CIRCLE-RADIUS 10)
+
+;; Constants for key events
+(define NEW-POS-CONTR-KEY "p")
+(define NEW-VEL-CONTR-KEY "v")
+(define NEW-X-CONTR-KEY "x")
+(define NEW-Y-CONTR-KEY "y")
+(define NEW-XY-CONTR-KEY "z")
+(define UP-KEY-EVENT "up")
+(define DOWN-KEY-EVENT "down")
+(define LEFT-KEY-EVENT "left")
+(define RIGHT-KEY-EVENT "right")
+
+;; Constants for mouse events
+(define BUTTON-DOWN "button-down")
+(define DRAG "drag")
+(define BUTTON-UP "button-up")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; INTERFACES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Every stable (stateful) object that lives in the world must implement the
+;; SWidget<%> interface.
+
+(define SWidget<%>
+  (interface ()
+    add-to-scene           ; Scene -> Scene
+    after-tick             ; -> Void
+    after-button-up        ; Nat Nat -> Void
+    after-button-down      ; Nat Nat -> Void
+    after-drag             ; Nat Nat -> Void
+    after-key-event        ; KeyEvent -> Void
+    ))
+
+(define Controller<%>    
+  (interface (SWidget<%>)
+
+    ;; Signal -> Void
+    ;; receive a signal from the model and adjust controller
+    ;; accordingly 
+    receive-signal
+    
+    ))
+
+(define Model<%>
+  (interface ()
+
+    ;; -> Void
+    after-tick        
+
+    ;; Controller<%> -> Void
+    ;; Registers the given controller to receive signal
+    register          
+
+    ;; Command -> Void
+    ;; Executes the given command
+    execute-command   
+))
+
+;; protocol: 
+;; model sends the controller an initialization signal as soon as it registers.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; DATA DEFINITIONS FOR COMMUNICATING WITH MODEL
+
+;; A Command is one of 
+;; -- (make-set-position x y)
+;; x and y represents the coordinates of center of the particle
+;; -- (make-incr-velocity dvx dvy)
+;; dvx and dvy represents the velocity of the particle in x and y direction
+;; respectively
+
+;; A Signal is one of
+;; -- (make-report-position x y)
+;; x and y represents the coordinates of center of the particle
+;; -- (make-report-velocity vx vy)
+;; vx and vy represents the velocity of the particle in x and y direction
+;; respectively
+
+;; provide the structs for Command and Signal
+;; the syntax of provide in #lang racket has more options in it.
+(provide 
+  (struct-out set-position) 
+  (struct-out incr-velocity)
+  (struct-out report-position)
+  (struct-out report-velocity))
+
+(define-struct set-position (x y) #:transparent)
+(define-struct incr-velocity (dvx dvy) #:transparent)
+(define-struct report-position (x y) #:transparent)
+(define-struct report-velocity (vx vy) #:transparent)

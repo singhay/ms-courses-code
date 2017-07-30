@@ -1,0 +1,244 @@
+#lang racket
+
+;; displays as an outline rectangle with text showing the x and y
+;; coordinates and velocity along these coordinates of the particle.
+
+;; the rectangle is draggable
+
+;; left,right arrow keys decrements or increments x-coordinate of the particle
+;; by 5
+;; up,down arrow keys decrements or increments y-coordinate of the particle by 5
+
+(require 2htdp/image)
+(require 2htdp/universe)
+(require "Interfaces.rkt")
+
+(provide Controller%)
+
+(define HANDLER-SIDE 10)
+(define HALF-HANDLER-SIDE 5)
+
+;; a Controller% is a (new Controller% [model Model<%>][x nonNegInt]
+;;                      [y nonNegInt])
+
+(define Controller%
+  (class* object% (Controller<%>)
+    
+    (init-field model)  ; the model
+    
+    ; Nats -- the position of the center of the controller
+    (init-field [x HALF-CANVAS-WIDTH] [y HALF-CANVAS-HEIGHT])
+    
+    (abstract width)
+    (abstract height)
+    
+    (field [half-width  (/ (width)  2)])
+    (field [half-height (/ (height) 2)])
+    (field [max-width (- CANVAS-WIDTH half-width)])
+    (field [max-height (- CANVAS-HEIGHT half-height)])
+    
+    ;; the x and y coordinates of the particle
+    (field [particle-x 0])
+    (field [particle-y 0])
+    ;; the velocity of the particle along x and y axes
+    (field [particle-vx 0])
+    (field [particle-vy 0])
+    
+    ;; fields for dragging
+    ;; if selected? then position of last button-down relative to
+    ;; center of viewer; else any value
+    (field [handler-selected? false])
+    (field [controller-selected? false])
+    (field [saved-mx 0])
+    (field [saved-my 0])
+
+    
+    (super-new)
+    
+    (send model register this)
+    
+    ;; receive-signal: Signal -> Void
+    ;; GIVEN: a signal
+    ;; EFFECT: decodes signal and updates local data
+    
+    (define/public (receive-signal sig)
+      (cond
+        [(report-position? sig)
+         (begin
+           (set! particle-x (report-position-x sig))
+           (set! particle-y (report-position-y sig)))]
+        [(report-velocity? sig)
+         (begin
+           (set! particle-vx (report-velocity-vx sig))
+           (set! particle-vy (report-velocity-vy sig)))]))
+
+    
+    ;; after-button-down : NonNegInteger NonNegInteger -> Void
+    ;; GIVEN: the location of a button-down event
+    ;; EFFECT: makes the viewer selected
+    ;; STRATEGY: Cases on whether the event is in this object
+    
+     (define/public (after-button-down mx my)
+      (cond
+        [(in-handler? mx my)
+         (begin
+            (set! handler-selected? true)
+            (set! saved-mx (- mx x))
+            (set! saved-my (- my y)))]
+        [(in-this? mx my)
+         (begin
+            (set! controller-selected? true)
+            (set! saved-mx (- mx x))
+            (set! saved-my (- my y)))]
+        [else 3742]))
+    
+
+    ; after-button-up : NonNegInteger NonNegInteger -> Void
+    ; GIVEN: the (x,y) location of a button-up event
+    ; EFFECT: makes this unselected
+    
+    (define/public (after-button-up mx my)
+      (begin
+        (set! handler-selected? false)
+        (set! controller-selected? false)
+        (send model set-particle-selected false)))
+    
+    
+    ;; after-drag : NonNegInteger NonNegInteger -> Void
+    ;; GIVEN: the location of a drag event
+    ;; STRATEGY: Cases on whether the handler is selected.
+    ;; If it is selected, move it so that the vector from its position to
+    ;; the drag event is equal to saved-mx.
+    
+    (define/public (after-drag mx my)
+      (if handler-selected?
+          (begin
+            (set! x (next-x-pos mx))
+            (set! y (next-y-pos my)))
+          (after-drag-inside-controller mx my)))
+          
+     ;; Abstract Method: after-drag-inside-controller
+    (abstract after-drag-inside-controller)
+      
+    
+    ;; in-this? : NonNegInteger NonNegInteger -> Boolean
+    ;; GIVEN: the mouse coordinates
+    ;; RETURNS: true iff the mouse coordinates are in the controller
+    ;; and not in the handler
+    ;; STRATEGY: Combining simpler functions
+    
+    (define/public (in-this? other-x other-y)
+      (and
+       (<= (- x half-width) other-x (+ x half-width))
+       (<= (- y half-height) other-y (+ y half-height))
+       (not handler-selected?)))
+
+    ;; in-handler? : NonNegInteger NonNegInteger -> Boolean
+    ;; GIVEN: the mouse coordinates
+    ;; RETURNS: true iff the mouse coordinates are in the handler
+    ;; STRATEGY: Combining simpler functions
+
+    (define/public (in-handler? other-x other-y)
+      (and
+       (<= (- x half-width) other-x (+ (- x half-width) 10))
+       (<= (- y half-height) other-y (+ (- y half-height) 10))))
+
+    
+    ;; next-x-pos: NonNegInt ->NonNegInt
+    ;; GIVEN: the x mouse coordinate
+    ;; RETURNS: the x position of the center of teh controller
+    ;; STRATEGY: Call a more general function
+    
+    (define/public (next-x-pos mx)
+      (next-pos-calc x mx saved-mx max-width half-width))
+ 
+    ;; next-y-pos: NonNegInt ->NonNegInt
+    ;; GIVEN: the y mouse coordinate
+    ;; RETURNS: the x position of the center of teh controller
+    ;; STRATEGY: Call a more general function
+    (define/public (next-y-pos my)
+      (next-pos-calc y my saved-my max-height half-height))
+
+    
+    ;; next-pos-calc: NonNegInt NonNegInt Int NonNegInt NonNegInt ->NonNegInt
+    ;; GIVEN: pos of teh center of the controller,mouse coordinates,
+    ;; offest value,min and max value where the controller can be dragged
+    ;; RETURNS: the coordinates of the center of the controller
+    ;; STRATEGY: Use cases on the (- m-pos offst)
+    
+    (define/public (next-pos-calc pos m-pos offst max min)
+       (local
+         ((define pos (- m-pos offst)))      
+           (cond
+             [(<= pos min) min]
+             [(>= pos max) max]
+             [else pos])))
+    
+    ;; add-to-scene : Scene -> Scene
+    ;; GIVEN: a scene
+    ;; RETURNS: a scene like the given one, but with this controller painted
+    ;; on it.
+    ;; STRATEGY: place the image centered at x y/Combining simpler functions
+    
+    (define/public (add-to-scene scene)
+      (place-image (handler-image)
+                   (+ (- x half-width) HALF-HANDLER-SIDE)
+                   (+ (- y half-height) HALF-HANDLER-SIDE)
+                   (place-image (viewer-image) x y
+                                (place-image (controller-image) x y scene))))
+    
+    
+    ;; after-tick: No functionality
+    (define/public (after-tick) 'viewer2-after-tick-trap)
+
+    ;; after-key-event:kev->Void
+    ;; GIVEN: a keyevent
+    ;; EFFECT: send up,down,left,right arrow keys to the model
+    
+    (define/public (after-key-event kev)
+      (send this after-key-event kev))
+    
+    
+    ;; current-handler-color>Color
+    ;; RETURNS: the color of the outline of the handler
+    ;; STRATEGY: Cases on handler-selected?
+
+    (define/public (current-handler-color)
+      (if handler-selected?
+          "red"
+          "black"))
+    
+
+    ;; current-controller-color->Color
+    ;; RETURNS: the color of the outline of the controller
+    ;; STRATEGY: Cases on controller-selected?
+    
+    (define/public (current-controller-color)
+      (if controller-selected?
+          "red"
+          "black"))
+    
+    ;; Abstarct Method: viewer-image
+    (abstract viewer-image)
+    
+
+    ;; handler-image->Image
+    ;; RETURNS: a square of a given side
+    ;; STRATEGY: Combining simpler functions
+    
+    (define/public (handler-image)
+      (square HANDLER-SIDE
+              "outline"
+              (send this current-handler-color)))
+
+    
+    ;; controller-image->Image
+    ;; RETURNS: a rectangle of a given width height
+    ;; STRATEGY: Combining simpler functions
+    
+    (define (controller-image)
+          (rectangle (width) (height) "outline" "black"))
+    
+    ))
+
+

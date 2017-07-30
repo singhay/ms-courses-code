@@ -1,0 +1,6 @@
+6 4 // number of elements and constraints
+2000000 2500000 3000000 5000000 6000000 7500000 // Maximize objective function
+1 1 1 0 0 0 1000 // Constraints as per city A population limit
+1 0 0 1 1 0 2000 // Constraints as per city B population limit
+0 1 0 1 0 1 2500 // Constraints as per city C population limit
+0 0 1 0 1 1 3000 // Constraints as per city D population limit

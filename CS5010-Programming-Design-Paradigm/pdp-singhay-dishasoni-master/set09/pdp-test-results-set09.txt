@@ -1,0 +1,144 @@
+PDP Test Report for set09
+
+
+Test Name: toys-tests
+Definitions:
+	(define TOY-X 380)
+	(define TOY-Y 100)
+	(define SQUARE-SPEED 100)
+	(define SQUARE-TOY (make-square-toy TOY-X TOY-Y SQUARE-SPEED))
+	(define THROBBER-TOY (make-throbber TOY-X TOY-Y))
+	(define CLOCK-TOY (make-clock TOY-X TOY-Y))
+	(define FOOTBALL-TOY (make-football TOY-X TOY-Y))
+
+Test Case: 
+  (test-equal?
+   "Test#1: Square speed should not change"
+   (send SQUARE-TOY toy-data)
+   SQUARE-SPEED)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#2: Throbber X position should not change"
+   (send THROBBER-TOY toy-x)
+   TOY-X)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#3: Football Y position should not change"
+   (send FOOTBALL-TOY toy-y)
+   TOY-Y)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#4: Square should move right"
+   (send (send SQUARE-TOY after-tick) toy-x)
+   (+ TOY-X SQUARE-SPEED))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#5: Square Y should not change"
+   (send SQUARE-TOY toy-y)
+   TOY-Y)
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#6: Throbber should expand"
+   (<
+    (send THROBBER-TOY toy-data)
+    (send (send THROBBER-TOY after-tick) toy-data)))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#7: Clock should increment the tick count"
+   (< (send CLOCK-TOY toy-data) (send (send CLOCK-TOY after-tick) toy-data)))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "Test#8: Football should contract"
+   (>
+    (send FOOTBALL-TOY toy-data)
+    (send (send FOOTBALL-TOY after-tick) toy-data)))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#9: Square should be restricted on right edge"
+   (send (send (send (make-square-toy 370 TOY-Y SQUARE-SPEED) after-tick) after-tick) toy-x)
+   480)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#10: Square Y should not change"
+   (send (send (send SQUARE-TOY after-tick) after-tick) toy-y)
+   TOY-Y)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#11: target-x should be 350 after smooth drag"
+   (send (send (send (make-world 10) after-mouse-event 245 295 "button-down") after-mouse-event 345 395 "drag") target-x)
+   350)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#12: target-y should be 400 after smooth drag"
+   (send (send (send (make-world 10) after-mouse-event 245 295 "button-down") after-mouse-event 345 395 "drag") target-y)
+   400)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#13: 1 toy should have been created"
+   (length (send (send (make-world 10) after-key-event "s") get-toys))
+   1)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#14: 1 toy should have been created"
+   (length (send (send (make-world 10) after-key-event "t") get-toys))
+   1)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#15: 1 toy should have been created"
+   (length (send (send (make-world 10) after-key-event "w") get-toys))
+   1)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "Test#16: 1 toy should have been created"
+   (length (send (send (make-world 10) after-key-event "f") get-toys))
+   1)
+Test Result: Success
+
+
+Results for Suite toys-tests:
+  Test Successes: 16
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 16/16
+Normalized Score: 15/15
+
+
+Overall Results:
+  Test Successes: 16
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 16/16
+Normalized Score: 15/15
+

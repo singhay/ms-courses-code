@@ -1,0 +1,4 @@
+Maximum revenue = 9375.0
+No of Type A Widgets: 0.0
+No of Type B Widgets: 0.0
+No of Type C Widgets: 75.0

@@ -1,0 +1,20 @@
+the edges in a graph are parametrized by values or potentials that encode the strength of the conditional dependence betweenthe random variables at the corresponding vertices. The main challenges in working with graphical models are model selection (choosing the structure of the graph), estimation of the edge parameters from data, and computation of marginal vertex probabilities and expectations, from their joint distribution. The last two tasks are sometimes called learning and inference in the computer science literature.
+
+Many of the methods for estimation and computation on graphs first decompose the graph into its maximal cliques. Relevant quantities are computed in the individual cliques and then accumulated across the entire graph.
+
+By casting the sparse inverse-covariance problem as a series of regressions, one can also quickly compute and examine the solution paths as a function of the penalty parameter λ.
+
+In the Gaussian model, if a node has all missing values, due to linearity one can simply average over the missing nodes to yield another Gaussian model over the observed nodes. Hence the inclusion of hidden nodes does not enrich the resulting model for the observed nodes; in fact, it imposes additional structure on its covariance matrix. However in the discrete model (described next) the inherent nonlinearities make hidden units a powerful way of expanding the model.
+
+They also compare the exact and approximate solutions in an extensive simulation study and find the “min” or “max” approximations are only slightly less accurate than the exact procedure, both for estimating the nonzero edges and for estimating the actual values of the edge parameters, and are much faster. Furthermore, they can handle denser graphs because they never need to compute the quantities EΘ(XjXk).
+
+Meinshausen and B̈uhlmann (2006) take a simple approach to this problem; they estimate a sparse graphical model by fitting a lasso model to each variable, using the others as predictors. The component ˆ−1 ij is then estimated to be nonzero if either the estimated coefficient of variable i on j or the estimated coefficient of variable j on i is nonzero (alternatively, they use an AND rule). They show that asymptotically, this consistently estimates the set of nonzero elements of −1.
+
+We  use  the  blockwise  coordinate  descent  approach  in  Banerjee and  others (2007)  as  a  launching point and propose a new algorithm for the exact problem. This new procedure is extremely simple and is substantially faster competing approaches in our tests. It also bridges the “conceptual gap” between the (Meinshausen and B̈uhlmann, 2006) proposal and the exact problem.
+
+The point is that problem (2.1) is not equivalent to p separate regularized regression problems, but to p coupled lasso problems that share the same W and =W−1. The use of W11 in place of S11 shares the information between the problems in an appropriate fashion. Note that each iteration in step (2.2) implies a permutation of the rows and columns to make the target column the last. The lasso problem in step (2.2) above can be efficiently solved by coordinate descent. We cycle through the predictors until convergence. 
+Note that ˆβ will typically be sparse, and so the computation w12=W11 ˆβ will be fast; if there are r nonzero elements, it takes rp operation
+
+A simple and fast algorithm for estimation of a sparse inverse covariance matrix using an L1 penalty. It cycles through the variables, fitting a modified lasso regression to each variable in turn. The individual lasso problems are solved by coordinate descent. The speed of this new procedure should facilitate the application of sparse inverse covariance procedures to large data sets involving thousands of parameters.
+
+The pattern of zero entries in the inverse covariance matrix of a multivariate normal distribution corresponds to conditional independence restrictions between variables. Covariance selection aims at estimating those structural zeros  from  data.  

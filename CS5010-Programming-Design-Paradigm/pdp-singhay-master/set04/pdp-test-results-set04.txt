@@ -1,0 +1,249 @@
+PDP Test Report for set04
+
+
+Test Name: screensaver-3-tests
+Definitions:
+	(define PAUSE-KEY " ")
+	(define T-INITIAL-WORLD (initial-world "Any"))
+	(define T-UNPAUSED-INITIAL-WORLD
+	  (world-after-key-event INITIAL-WORLD PAUSE-KEY))
+	(define INITIAL-WORLD
+	  (if (world-paused? T-INITIAL-WORLD)
+	    T-INITIAL-WORLD
+	    T-UNPAUSED-INITIAL-WORLD))
+	(define UNPAUSED-INITIAL-WORLD
+	  (if (not (world-paused? T-INITIAL-WORLD))
+	    T-UNPAUSED-INITIAL-WORLD
+	    T-INITIAL-WORLD))
+	(define WORLD-WITH-1-RECT (world-after-key-event UNPAUSED-INITIAL-WORLD "n"))
+
+Test Case: 
+  (test-true
+   "TC#1: New rectangles at center with 0 velocity"
+   (rects=?
+    (world-rects (world-after-key-event WORLD-WITH-1-RECT "n"))
+    (list
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0))))
+Test Result: Error
+andmap: all lists must have same size; arguments were: #<procedure:rect=?> (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 200 150 0 0 #f 0 0 #f '(())) '()) (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 200 150 0 0 #f 0 0 #f '(())))
+
+Test Case: 
+  (test-true
+   "TC#2: velocities change after pressing arrow keys"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "left")
+      (world-after-key-event _ "up")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")))
+    (list (new-rectangle HALF-WIDTH HALF-HEIGHT 4 4))))
+Test Result: Error
+andmap: all lists must have same size; arguments were: #<procedure:rect=?> (list (rect 200 150 4 4 #f 0 0 #f '(())) '()) (list (rect 200 150 4 4 #f 0 0 #f '(())))
+
+Test Case: 
+  (test-true
+   "TC#3: velocities of rectangles after a tick"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "left")
+      (world-after-key-event _ "up")
+      (world-after-key-event _ "n")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")
+      (world-after-key-event _ PAUSE-KEY)
+      (world-after-tick _)))
+    (list
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (new-rectangle (+ HALF-WIDTH 4) (+ HALF-HEIGHT 4) 4 4))))
+Test Result: Error
+andmap: all lists must have same size; arguments were: #<procedure:rect=?> (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 204 154 4 4 #f 0 0 #f '(())) '()) (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 204 154 4 4 #f 0 0 #f '(())))
+
+
+Results for Suite screensaver-3-tests:
+  Test Successes: 0
+  Test Failures: 0
+  Test Errors: 3
+
+Raw Score: 0/3
+Normalized Score: 0/15
+
+
+Test Name: screensaver-4-tests
+Definitions:
+	(define PAUSE-KEY " ")
+	(define T-INITIAL-WORLD (initial-world "Any"))
+	(define T-UNPAUSED-INITIAL-WORLD
+	  (world-after-key-event INITIAL-WORLD PAUSE-KEY))
+	(define INITIAL-WORLD
+	  (if (world-paused? T-INITIAL-WORLD)
+	    T-INITIAL-WORLD
+	    T-UNPAUSED-INITIAL-WORLD))
+	(define UNPAUSED-INITIAL-WORLD
+	  (if (not (world-paused? T-INITIAL-WORLD))
+	    T-UNPAUSED-INITIAL-WORLD
+	    T-INITIAL-WORLD))
+	(define WORLD-WITH-1-RECT (world-after-key-event INITIAL-WORLD "n"))
+
+Test Case: 
+  (test-true
+   "TC#3: velocities of rectangles after a tick"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "left")
+      (world-after-key-event _ "up")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")
+      (world-after-key-event _ "n")
+      (world-after-key-event _ PAUSE-KEY)
+      (world-after-tick _)))
+    (list
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (new-rectangle (+ HALF-WIDTH 4) (+ HALF-HEIGHT 4) 4 4))))
+Test Result: Error
+andmap: all lists must have same size; arguments were: #<procedure:rect=?> (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 204 154 4 4 #f 0 0 #f '(())) '()) (list (rect 200 150 0 0 #f 0 0 #f '(())) (rect 204 154 4 4 #f 0 0 #f '(())))
+
+Test Case: 
+  (test-true
+   "TC#4: select pen on pressing 'd'"
+   (rect-pen-down?
+    (~>
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (rect-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+     (rect-after-key-event _ "d"))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#5: velocities of rectangles after a tick"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")
+      (world-after-key-event _ PAUSE-KEY)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)))
+    (list (new-rectangle (+ HALF-WIDTH 40) (+ HALF-HEIGHT 40) 4 4))))
+Test Result: Error
+andmap: all lists must have same size; arguments were: #<procedure:rect=?> (list (rect 240 190 4 4 #f 0 0 #f '(())) '()) (list (rect 240 190 4 4 #f 0 0 #f '(())))
+
+Test Case: 
+  (test-false
+   "TC#7:  unselect pen on pressing 'u'"
+   (rect-pen-down?
+    (~>
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (rect-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+     (rect-after-key-event _ "d")
+     (rect-after-key-event _ "u"))))
+Test Result: Success
+
+
+Results for Suite screensaver-4-tests:
+  Test Successes: 2
+  Test Failures: 0
+  Test Errors: 2
+
+Raw Score: 2/4
+Normalized Score: 8/15
+
+
+Test Name: roster-tests
+Definitions:
+	(define slip-1 (make-slip "yellow" "Jai" "Asher"))
+	(define slip-2 (make-slip "yellow" "Asher" "Jai"))
+	(define slip-3 (make-slip "blue" "Asher" "Jai"))
+	(define slip-4 (make-slip "blue" "Jai" "Asher"))
+	(define slip-5 (make-slip "yellow" "Jai" "Asher2"))
+
+Test Case: 
+  (test-equal?
+   "TC#8 Remove Duplicates"
+   (or (equal? (shivers-roster (list slip-3 slip-4)) (list slip-3))
+       (equal? (shivers-roster (list slip-3 slip-4)) (list slip-4)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#9 Remove Duplicates"
+   (or (equal? (felleisen-roster (list slip-1 slip-2)) (list slip-1))
+       (equal? (felleisen-roster (list slip-1 slip-2)) (list slip-2)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#10 Remove unwanted color"
+   (or (equal?
+        (felleisen-roster (list slip-1 slip-4 slip-5))
+        (list slip-1 slip-5))
+       (equal?
+        (felleisen-roster (list slip-1 slip-4 slip-5))
+        (list slip-5 slip-1)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#11 Returns empty?"
+   (felleisen-roster (list slip-3 slip-4))
+   '())
+Test Result: Success
+
+
+Results for Suite roster-tests:
+  Test Successes: 4
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 4/4
+Normalized Score: 15/15
+
+
+Overall Results:
+  Test Successes: 6
+  Test Failures: 0
+  Test Errors: 5
+
+Raw Score: 6/11
+Normalized Score: 8/15
+

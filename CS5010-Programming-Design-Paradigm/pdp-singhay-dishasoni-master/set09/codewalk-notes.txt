@@ -1,0 +1,19 @@
+TA Name:- Vinay Patil [patil.vi@husky.neu.edu]
+Helper Name:- Parth Bansal [bansal.p@husky.neu.edu]
+
+Design Grade:- A
+Presentation Grade - singhay:- A
+Presentation Grade - dishasoni:- A
+Correctness Score:- 15/15
+
+Notes:-
+1. World and WorldState should be consistent throughout the entire program. Even for Playground and PlaygroundState.
+2. Missing template for ListOfToy.
+3. Missing GIVEN and RETURNS for the functions.
+4. Please mention proper contracts for the functions defined. 
+5. Please be consistent with using Integer or NAT.
+6. Please be consistent on the return types for the functions.
+7. You don't really need to check for in-target? condition in button-up.
+8. You could have defined helper functions instead of defining a local function. 
+9. Please cut down on your function length.
+10. Could have defined a generalized function to calculate-x and calculate-y function. 

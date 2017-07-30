@@ -1,0 +1,5 @@
+3 3 // number of elements and constraints
+55 75 125 // Maximize objective
+18 36 24 2100 // Constraints for supplies
+16 48 32 2400 // Constraints for labor
+1 1 1 100 // Constraints for assembly line units

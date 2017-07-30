@@ -1,0 +1,150 @@
+#lang racket
+
+;; displays as an outline rectangle with text showing the x and y
+;; coordinates and velocity along these coordinates of the particle.
+
+;; the rectangle is draggable
+
+;; left,right arrow keys decrements or increments x-coordinate
+;; of the particle by 5
+;; up,down arrow keys decrements or increments y-coordinate of
+;; the particle by 5
+
+(require 2htdp/image)
+(require 2htdp/universe)
+(require "Interfaces.rkt")
+(require "Controller.rkt")
+
+(provide XYController%)
+;; a XYController% is a (new XYController% [model Model<%>])
+
+(define XYController%
+  (class* Controller% (Controller<%>)
+    
+   ; (init-field model)  ; the model
+ 
+     (inherit-field model x y )  
+    (inherit-field particle-x particle-y particle-vx particle-vy)
+    (inherit-field handler-selected? controller-selected? saved-mx saved-my)
+    (define/override (width) (+ (* 2 CONTROLLER-PADDING) PARTICLE-AREA-WIDTH))
+    (define/override (height) (+ (* 2 CONTROLLER-PADDING) PARTICLE-AREA-HEIGHT))
+
+    (field [pr-width PARTICLE-AREA-WIDTH])
+    (field [pr-height PARTICLE-AREA-HEIGHT])
+    (field [half-pr-width (/ pr-width 2)])
+    (field [half-pr-height (/ pr-height 2)])
+    
+    
+    ; Nats -- the position of the center of the controller
+  ;  (init-field [x HALF-CANVAS-WIDTH] [y HALF-CANVAS-HEIGHT])   
+    
+  ; (init-field [width 210][height 160])
+
+  ;   (field [half-width  (/ width  2)])
+  ;   (field [half-height (/ height 2)])
+    
+  ;; the x and y coordinates of the particle
+  ;  (field [particle-x 0])
+  ;  (field [particle-y 0])
+  ;; the velocity of the particle along x and y axes
+  ;  (field [particle-vx 0])
+  ;  (field [particle-vy 0])
+
+   ; (inherit-field particle-x particle-y particle-vx particle-vy)
+   ; (inherit-field selected? saved-mx saved-my)
+    
+    ;; fields for dragging
+    ;; It there has ever been a button-down in this object, then these
+    ;; contain the position of last button-down relative to
+    ;; center of viewer.  Else any value
+    ; (field [selected? false])
+    ; (field [saved-mx 0])
+    ; (field [saved-my 0])
+    
+    (super-new)
+
+   (send model register this)
+    
+    ;; after-button-down : NonNegInteger NonNegInteger -> Void
+    ;; GIVEN: the location of a button-down event
+    ;; EFFECT: makes the viewer selected
+    ;; STRATEGY: Cases on whether the event is in this object
+
+      (define/override (after-button-down mx my)
+      (cond
+        [(send this in-handler? mx my)
+         (begin
+            (set! handler-selected? true)
+            (set! saved-mx (- mx x))
+            (set! saved-my (- my y)))]
+        [(in-particle-rectangle? mx my)
+         (begin
+            (set! controller-selected? true)
+            (set! saved-mx (- mx particle-x))
+            (set! saved-my (- my particle-y))
+            (send model set-particle-selected true))]
+        [else 3742]))   
+    
+
+     
+    ;; after-drag-inside-controller : NonNegInteger NonNegInteger -> Void
+    ;; GIVEN: the location of a button-down event
+    ;; EFFECT: makes the particle dragged in the particle rectangle
+    ;; STRATEGY: Cases on whether the event is in the particle rectangle
+    
+    (define/override (after-drag-inside-controller mx my)
+      (if (in-particle-rectangle? mx my)
+          (begin
+          (send model execute-command
+                   (make-set-position
+                    (- mx saved-mx ) (- my saved-my ))))
+          123))
+  
+    
+   ;; after-key-event: KeyEvent -> Void
+    ;; GIVEN: a keyevent
+    ;; EFFECT : no functionality
+    
+    (define/override (after-key-event kev)
+      3456)
+
+
+    ;; in-particle-rectangle? : NonNegInteger NonNegInteger -> Boolean
+    ;; GIVEN: the mouse coordinates
+    ;; RETURNS: true iff the mouse coordinates are in the inner particle
+    ;; rectangle
+    ;; STRATEGY: Combining simpler functions
+    
+    (define (in-particle-rectangle? mx my)
+      (and
+       (<= (- x half-pr-width) mx (+ x half-pr-width))
+       (<= (- y half-pr-height) my (+ y half-pr-height))))
+
+    ;; viewer-image->Image
+    ;; RETURNS:the image of the image of the XY controller
+    ;; STRATEGY: Combining simpler functions
+    
+    (define/override (viewer-image)
+      (overlay (rectangle  pr-width  pr-height "outline" "blue")
+      (place-image  (data-image) particle-x particle-y
+                   (rectangle pr-width pr-height "outline" "blue"))))
+      
+        
+    ;; data-image->Image
+    ;; RETURNS: the particle image
+    ;; STRATEGY: Combining simpler functions
+    
+    (define (data-image)
+       (overlay
+        (circle 2 "solid" "black")
+        (circle 10 "solid" "red")))
+
+       
+      ))
+
+
+
+    
+    
+ 
+

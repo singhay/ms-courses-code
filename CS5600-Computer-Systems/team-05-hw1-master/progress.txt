@@ -1,0 +1,27 @@
+TEAM NAME: team-05-hw1
+MEMBERS  : Evan and Ayush
+DEADLINE : Oct. 11, 2016
+
+PROGRESS:
+1. Completed Q1 from Homework on Thursday, Sep 22 2016.
+2. Brainstormed on the context of the problem and drafted our approach towards
+solving the problem in a timely and efficient manner.
+3. After going through the problems we've decided to split the work due to the
+seperation of concerns here on the rest of questions since each of them fall
+under different category and can be done individually.
+4. Started working on Q2 and Q3.
+
+WORKFLOW:
+1. Never commit to master, each of us would fork the master branch, make our
+own changes locally and create a Pull Request which would be merged only after
+code is reviewed thoroughly by the other team mate, enforcing a strong
+collaborative code evaluation system.
+2. Create issues on github with any wall we hit on a module so other could
+look at it and comment with a plausible solution.
+2. Trello Board to keep track of our work progress on a weekly basis.
+3. On class days, we plan on meeting up an hour before class to discuss ideas
+and questions that could not be answered online.
+
+REPO/BOARD:
+GIT   : https://github.ccs.neu.edu/cs5600-f16/team-05-hw1
+TRELLO: https://trello.com/b/zbGhjEVE/cs5600-hw1

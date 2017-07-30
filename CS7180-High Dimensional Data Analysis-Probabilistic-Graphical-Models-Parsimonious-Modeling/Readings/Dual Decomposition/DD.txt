@@ -1,0 +1,38 @@
+Many inference problems with discrete variables result in a difficult combinatorial optimization problem. In recent years, the technique of dual decomposition, also called Lagrangian relaxation, has proven to be a powerful means of solving these inference problems by decomposing them into simpler components that are repeatedly solved independently and combined into a global solution. In this chapter, we introduce the general technique of dual decomposition through its application to the problem of finding the most likely (MAP) assignment in Markov random fields. We discuss both subgradient and block coordinate descent approaches to solving the dual problem. The resulting message-passing algorithms are similar to max-product, but can be shown to solve a linear programming relaxation of the MAP problem. We show how many of the MAP algorithms are related to each other, and also quantify when the MAP solution can and cannot be decoded directly from the dual solution.
+
+The paper starts by motivating us for a solution by the fact that wthout additional restrictions on the choice of potential functions, or which edges to include, finding the maximum probability assignment of a graphical model (also known as the MAP assignment) is NP-Hard. Various approximation algorithms that use either Linear Programming or Dual Decomposition also known as Lagrangian Relaxation converts the model into a constrained optimization problem solvable in polynomial time but are not really scalable. With the help of two examples from protein structures to natural language processing, the application and benefit of performance gains in finding out the MAP. Thus, the need for a general purpose algorithm for MAP inference arises where Dual Decomposition comes into play as it divides model into tractable components, solves each one locally and passes messages to induce the components on a global solution.
+
+With dual decomposition, the original problem is broken up into smaller subproblems involving maximizations of each single node potential and each edge potential. Although these local maximizing assignments are easy to obtain, they are unlikely to agree with each other without modifying the potential functions. These modifications are provided by the Lagrange multipliers associated with agreement constraints. Paper describes two classes of algorithms, one based on a subgradient method and another based on block coordinate descent for minimizing the Lagrangian relaxation with each having their own pros and cons. Next they give an upper bound which even when not exact, can be extremely valuable when used together with a branch-and-bound procedure to find the MAP assignment. They show that the MAP inference method is agnostic to either LP or DD.
+
+The paper shows promising techniques for speeding up the performance in practice, dual decomposition has best theoretical guarantees and can use very fast MAP subroutines for solving large model components but it is still not the fastest and has a lot of tunable features e.g. larger lambda to improve quality, adject step size, methods to construct condidate. 
+
+DD is general purpose algo for MAP inference
+- Divides model into tractable components
+- Solves each one locally
+- Passes lambda "messages" to induce them to agree
+Any tractable MAP subclass can be used in this setting allowing slaves to be large and strictly structured.
+
+Theory
+- A subgradient optimization algorithm on dual problem to MAP
+- Gurarantees
+	- Upper bound on distance to max-product
+	- Conditions that guarantee exact MAP solution
+- Provides some analysis for deciding which decomposition is better for slaves	
+
+Practice
+- Very general purpose
+- Best theoretical guarantees
+- Can use very fast MAP subroutines for solving large model components
+
+Cons
+- Not the fastest
+- Lots of tunable parameters e.g. larger slaves improve quality, adject step size, methods to construct condidate 
+
+e.g. Denoising, Infilling, Missing Regions, Foreground/background segmentation, depth estimation
+
+Tree structures (Wainwright et al., 2005; Komodakis et al., 2010),
+Matchings (Lacoste-Julien et al., 2006; Duchi et al., 2007; Yarkony et al.,
+2010),
+Supermodular functions (Komodakis et al., 2010),
+Cardinality and order constraints (Gupta et al., 2007; Tarlow et al., 2010),
+Functions with small support

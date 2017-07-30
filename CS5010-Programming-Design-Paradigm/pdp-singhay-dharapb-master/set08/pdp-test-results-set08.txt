@@ -1,0 +1,315 @@
+PDP Test Report for set08
+
+
+Test Name: pretty-tests
+Definitions:
+	(define max-line-width
+	  (lambda (l) (foldr max 0 (map (lambda (s) (string-length s)) l))))
+	(define SINGLE-DIFF-EXP (make-diff-exp (list 1)))
+	(define SINGLE-DIFF-STR (list "(- 1)"))
+	(define SINGLE-DIFF-WIDTH (string-length "(- 1)"))
+	(define SINGLE-SUM-EXP (make-sum-exp (list 2 3)))
+	(define SINGLE-SUM-EXP-1LINE-STR (list "(+ 2 3)"))
+	(define SINGLE-SUM-EXP-1LINE-WIDTH (max-line-width SINGLE-SUM-EXP-1LINE-STR))
+	(define SINGLE-SUM-EXP-2LINES-STR (list "(+ 2" "   3)"))
+	(define SINGLE-SUM-EXP-2LINES-WIDTH (max-line-width SINGLE-SUM-EXP-2LINES-STR))
+	(define NESTED-EXP1 (make-diff-exp (list (make-sum-exp (list 7 10)) 2)))
+	(define NESTED-EXP1-1LINE-STR (list "(- (+ 7 10) 2)"))
+	(define NESTED-EXP1-1LINE-WIDTH (max-line-width NESTED-EXP1-1LINE-STR))
+	(define NESTED-EXP1-3LINES-STR (list "(- (+ 7" "      10)" "   2)"))
+	(define NESTED-EXP1-3LINES-WIDTH (max-line-width NESTED-EXP1-3LINES-STR))
+	(define NESTED-EXP2
+	  (make-sum-exp
+	   (list (make-diff-exp (list 8 3 1)) (make-diff-exp (list 11 4 1)))))
+	(define NESTED-EXP2-1LINE-STR (list "(+ (- 8 3 1) (- 11 4 1))"))
+	(define NESTED-EXP2-1LINE-WIDTH (max-line-width NESTED-EXP2-1LINE-STR))
+	(define NESTED-EXP2-6LINES-STR
+	  (list "(+ (- 8" "      3" "      1)" "   (- 11" "      4" "      1))"))
+	(define NESTED-EXP2-6LINES-WIDTH (max-line-width NESTED-EXP2-6LINES-STR))
+	(define MULTIPLE-EXP1
+	  (make-sum-exp
+	   (list
+	    472
+	    (make-sum-exp (list 12 8 (make-diff-exp (list 7 19))))
+	    (make-diff-exp (list (make-sum-exp (list 5 22)) 33))
+	    12222)))
+	(define MULTIPLE-EXP1-7LINES-STR
+	  (list
+	   "(+ 472"
+	   "   (+ 12"
+	   "      8"
+	   "      (- 7 19))"
+	   "   (- (+ 5 22)"
+	   "      33)"
+	   "   12222)"))
+	(define MULTIPLE-EXP1-8LINES-STR
+	  (list
+	   "(+ 472"
+	   "   (+ 12"
+	   "      8"
+	   "      (- 7"
+	   "         19))"
+	   "   (- (+ 5 22)"
+	   "      33)"
+	   "   12222)"))
+	(define MULTIPLE-EXP1-9LINES-STR
+	  (list
+	   "(+ 472"
+	   "   (+ 12"
+	   "      8"
+	   "      (- 7"
+	   "         19))"
+	   "   (- (+ 5"
+	   "         22)"
+	   "      33)"
+	   "   12222)"))
+	(define MULTIPLE-EXP1-7LINES-WIDTH (max-line-width MULTIPLE-EXP1-7LINES-STR))
+	(define LONG-EXP1
+	  (make-sum-exp
+	   (list
+	    (make-sum-exp (build-list 15 (lambda (x) (* x 2))))
+	    (make-sum-exp (build-list 18 (lambda (x) (+ x 2)))))))
+	(define LONG-EXP1-2LINES-STR
+	  (list
+	   "(+ (+ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28)"
+	   "   (+ 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19))"))
+	(define LONG-EXP1-33LINES-STR
+	  (list
+	   "(+ (+ 0"
+	   "      2"
+	   "      4"
+	   "      6"
+	   "      8"
+	   "      10"
+	   "      12"
+	   "      14"
+	   "      16"
+	   "      18"
+	   "      20"
+	   "      22"
+	   "      24"
+	   "      26"
+	   "      28)"
+	   "   (+ 2"
+	   "      3"
+	   "      4"
+	   "      5"
+	   "      6"
+	   "      7"
+	   "      8"
+	   "      9"
+	   "      10"
+	   "      11"
+	   "      12"
+	   "      13"
+	   "      14"
+	   "      15"
+	   "      16"
+	   "      17"
+	   "      18"
+	   "      19))"))
+	(define LONG-EXP1-2LINES-WIDTH (max-line-width LONG-EXP1-2LINES-STR))
+
+Test Case: 
+  (test-equal?
+   "TC#1: Single diff expr"
+   (expr-to-strings SINGLE-DIFF-EXP SINGLE-DIFF-WIDTH)
+   SINGLE-DIFF-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#2: Single sum expr in 1 line"
+   (expr-to-strings SINGLE-SUM-EXP SINGLE-SUM-EXP-1LINE-WIDTH)
+   SINGLE-SUM-EXP-1LINE-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#3: Single sum expr in 2 lines"
+   (expr-to-strings SINGLE-SUM-EXP SINGLE-SUM-EXP-2LINES-WIDTH)
+   SINGLE-SUM-EXP-2LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#4: Single sum expr - not enough space"
+   (with-handlers
+    ((exn:fail? (lambda (exn) true)))
+    (expr-to-strings SINGLE-SUM-EXP (- SINGLE-SUM-EXP-2LINES-WIDTH 1))))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#5: 1 nested expr in 1 line"
+   (expr-to-strings NESTED-EXP1 NESTED-EXP1-1LINE-WIDTH)
+   NESTED-EXP1-1LINE-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#6: 1 nested expr in 3 lines"
+   (expr-to-strings NESTED-EXP1 NESTED-EXP1-3LINES-WIDTH)
+   NESTED-EXP1-3LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#7: 2 nested exprs in 1 lines"
+   (expr-to-strings NESTED-EXP2 NESTED-EXP2-1LINE-WIDTH)
+   NESTED-EXP2-1LINE-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#8: 2 nested exprs in 6 lines"
+   (expr-to-strings NESTED-EXP2 NESTED-EXP2-6LINES-WIDTH)
+   NESTED-EXP2-6LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#9: 2 nested exprs - not enough space"
+   (with-handlers
+    ((exn:fail? (lambda (exn) true)))
+    (expr-to-strings NESTED-EXP2 (- NESTED-EXP2-6LINES-WIDTH 1))))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#10: multiple nested exprs in 7 lines"
+   (expr-to-strings MULTIPLE-EXP1 MULTIPLE-EXP1-7LINES-WIDTH)
+   MULTIPLE-EXP1-7LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#11: multiple nested exprs in 8 lines"
+   (expr-to-strings MULTIPLE-EXP1 (- MULTIPLE-EXP1-7LINES-WIDTH 1))
+   MULTIPLE-EXP1-8LINES-STR)
+Test Result: Failure
+actual : ((+ 472    (+ 12       8       (- 7          19))    (- (+ 5          22)       33)    12222))
+expected : ((+ 472    (+ 12       8       (- 7          19))    (- (+ 5 22)       33)    12222))
+expression : (check-equal? (expr-to-strings MULTIPLE-EXP1 (- MULTIPLE-EXP1-7LINES-WIDTH 1)) MULTIPLE-EXP1-8LINES-STR)
+params : (((+ 472    (+ 12       8       (- 7          19))    (- (+ 5          22)       33)    12222)) ((+ 472    (+ 12       8       (- 7          19))    (- (+ 5 22)       33)    12222)))
+
+Test Case: 
+  (test-equal?
+   "TC#12: multiple nested exprs in 9 lines"
+   (expr-to-strings MULTIPLE-EXP1 (- MULTIPLE-EXP1-7LINES-WIDTH 2))
+   MULTIPLE-EXP1-9LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#13: long expr in 2 lines"
+   (expr-to-strings LONG-EXP1 LONG-EXP1-2LINES-WIDTH)
+   LONG-EXP1-2LINES-STR)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#14: long expr in 33 lines"
+   (expr-to-strings LONG-EXP1 (- LONG-EXP1-2LINES-WIDTH 20))
+   LONG-EXP1-33LINES-STR)
+Test Result: Success
+
+
+Results for Suite pretty-tests:
+  Test Successes: 13
+  Test Failures: 1
+  Test Errors: 0
+
+Raw Score: 13/14
+Normalized Score: 14/15
+
+
+Test Name: robot-tests
+Definitions:
+	(define STARTING-POS1 (list 2 0))
+	(define TARGET-POS11 (list 5 3))
+	(define TARGET-POS12 (list 2 4))
+	(define TARGET-POS13 (list 3 2))
+	(define STARTING-POS2 (list 5 5))
+	(define TARGET-POS21 (list 3 3))
+	(define TARGET-POS22 (list 3 5))
+	(define BLOCKS2 (list (list 4 4) (list 4 5) (list 4 6)))
+	(define STARTING-POS3 (list 0 10))
+	(define TARGET-POS3 (list 4 6))
+	(define BLOCKS3
+	  (list
+	   (list -1 11)
+	   (list 1 11)
+	   (list -1 9)
+	   (list 2 10)
+	   (list 2 8)
+	   (list 0 8)))
+	(define STARTING-POS4 (list 4 2))
+	(define TARGET-POS4 (list 7 5))
+	(define BLOCKS4 (list (list 6 4) (list 6 6) (list 8 4) (list 8 6)))
+
+Test Case: 
+  (test-equal?
+   "TC#1: straight path from start to target (no blocks)"
+   (eval-plan STARTING-POS1 empty (path STARTING-POS1 TARGET-POS11 empty))
+   TARGET-POS11)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#2: plan with multiple moves (no blocks)"
+   (eval-plan STARTING-POS1 empty (path STARTING-POS1 TARGET-POS12 empty))
+   TARGET-POS12)
+Test Result: Error out of time
+
+Test Case: 
+  (test-false
+   "TC#3: no plan - target position out of reach"
+   (path STARTING-POS1 TARGET-POS13 empty))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#4: block on the shortest path"
+   (eval-plan STARTING-POS2 BLOCKS2 (path STARTING-POS2 TARGET-POS21 BLOCKS2))
+   TARGET-POS21)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#5: going around the blocks"
+   (eval-plan STARTING-POS2 BLOCKS2 (path STARTING-POS2 TARGET-POS22 BLOCKS2))
+   TARGET-POS22)
+Test Result: Success
+
+Test Case: 
+  (test-false
+   "TC#6: no plan - starting position surrounded by blocks"
+   (path STARTING-POS3 TARGET-POS3 BLOCKS3))
+Test Result: Success
+
+Test Case: 
+  (test-false
+   "TC#7: no plan - target position surrounded by blocks"
+   (path STARTING-POS4 TARGET-POS4 BLOCKS4))
+Test Result: Error
+first: expected argument of type <non-empty list>; given: #f
+
+
+Results for Suite robot-tests:
+  Test Successes: 5
+  Test Failures: 0
+  Test Errors: 2
+
+Raw Score: 5/7
+Normalized Score: 11/15
+
+
+Overall Results:
+  Test Successes: 18
+  Test Failures: 1
+  Test Errors: 2
+
+Raw Score: 18/21
+Normalized Score: 12/15
+

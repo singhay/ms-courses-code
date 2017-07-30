@@ -1,0 +1,7 @@
+Maximized Value = 24625000000
+Objective Value of the element 0 : 1000
+Objective Value of the element 1 : 0
+Objective Value of the element 2 : 0
+Objective Value of the element 3 : 250
+Objective Value of the element 4 : 750
+Objective Value of the element 5 : 2250

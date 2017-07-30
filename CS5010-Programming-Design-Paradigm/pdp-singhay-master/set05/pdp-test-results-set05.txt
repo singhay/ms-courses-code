@@ -1,0 +1,259 @@
+PDP Test Report for set05
+
+
+Test Name: screensaver-5-tests
+Definitions:
+	(define PAUSE-KEY " ")
+	(define T-INITIAL-WORLD (initial-world "Any"))
+	(define T-UNPAUSED-INITIAL-WORLD
+	  (world-after-key-event INITIAL-WORLD PAUSE-KEY))
+	(define INITIAL-WORLD
+	  (if (world-paused? T-INITIAL-WORLD)
+	    T-INITIAL-WORLD
+	    T-UNPAUSED-INITIAL-WORLD))
+	(define UNPAUSED-INITIAL-WORLD
+	  (if (not (world-paused? T-INITIAL-WORLD))
+	    T-UNPAUSED-INITIAL-WORLD
+	    T-INITIAL-WORLD))
+	(define WORLD-WITH-1-RECT (world-after-key-event INITIAL-WORLD "n"))
+
+Test Case: 
+  (test-true
+   "TC#1: velocities of rectangles after a tick"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "left")
+      (world-after-key-event _ "up")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")
+      (world-after-key-event _ "n")
+      (world-after-key-event _ PAUSE-KEY)
+      (world-after-tick _)))
+    (list
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (new-rectangle (+ HALF-WIDTH 4) (+ HALF-HEIGHT 4) 4 4))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#2: select pen on pressing 'd'"
+   (rect-pen-down?
+    (~>
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (rect-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+     (rect-after-key-event _ "d"))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#3: velocities of rectangles after a tick"
+   (rects=?
+    (world-rects
+     (~>
+      WORLD-WITH-1-RECT
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "down")
+      (world-after-key-event _ "right")
+      (world-after-key-event _ "right")
+      (world-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-up")
+      (world-after-key-event _ PAUSE-KEY)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)
+      (world-after-tick _)))
+    (list (new-rectangle (+ HALF-WIDTH 40) (+ HALF-HEIGHT 40) 4 4))))
+Test Result: Success
+
+Test Case: 
+  (test-false
+   "TC#4: unselect pen on pressing 'u'"
+   (rect-pen-down?
+    (~>
+     (new-rectangle HALF-WIDTH HALF-HEIGHT 0 0)
+     (rect-after-mouse-event _ HALF-WIDTH HALF-HEIGHT "button-down")
+     (rect-after-key-event _ "d")
+     (rect-after-key-event _ "u"))))
+Test Result: Success
+
+
+Results for Suite screensaver-5-tests:
+  Test Successes: 4
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 4/4
+Normalized Score: 15/15
+
+
+Test Name: class-lists-tests
+Definitions:
+	(define slip-1 (make-slip "yellow" "Jai" "Asher"))
+	(define slip-2 (make-slip "yellow" "Asher" "Jai"))
+	(define slip-3 (make-slip "blue" "Asher" "Jai"))
+	(define slip-4 (make-slip "blue" "Jai" "Asher"))
+	(define slip-5 (make-slip "yellow" "Jai" "Asher2"))
+
+Test Case: 
+  (test-equal?
+   "TC#5: Remove Duplicates"
+   (or (equal? (shivers-roster (list slip-3 slip-4)) (list slip-3))
+       (equal? (shivers-roster (list slip-3 slip-4)) (list slip-4)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#6: Remove Duplicates"
+   (or (equal? (felleisen-roster (list slip-1 slip-2)) (list slip-1))
+       (equal? (felleisen-roster (list slip-1 slip-2)) (list slip-2)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#7: Remove unwanted color"
+   (or (equal?
+        (felleisen-roster (list slip-1 slip-4 slip-5))
+        (list slip-1 slip-5))
+       (equal?
+        (felleisen-roster (list slip-1 slip-4 slip-5))
+        (list slip-5 slip-1)))
+   #t)
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#8: Returns empty?"
+   (felleisen-roster (list slip-3 slip-4))
+   '())
+Test Result: Success
+
+
+Results for Suite class-lists-tests:
+  Test Successes: 4
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 4/4
+Normalized Score: 15/15
+
+
+Test Name: rosters-tests
+Definitions:
+	(define S1 (list "Douglas"))
+	(define S2 (list "Jim"))
+	(define S3 (list "Aldous"))
+	(define S4 (list "Jack London"))
+	(define S5 (list "Herbert" "Wells"))
+	(define C1 (list "PDP"))
+	(define C2 (list "Networks"))
+	(define C3 (list "Machine Learning"))
+	(define C4 (list "Computer Systems" "CS5600"))
+	(define SE1 (list (make-enrollment S1 C1)))
+	(define SE2
+	  (list
+	   (make-enrollment S1 C1)
+	   (make-enrollment S3 C2)
+	   (make-enrollment S2 C1)
+	   (make-enrollment S4 C2)))
+	(define SE3
+	  (list
+	   (make-enrollment S5 C3)
+	   (make-enrollment S5 C4)
+	   (make-enrollment S2 C3)
+	   (make-enrollment S2 C4)))
+	(define R1 (make-roster C1 (list S1 S2)))
+	(define R2 (make-roster C2 (list S3 S2)))
+	(define R3 (make-roster C1 (list S3 S2)))
+	(define R4 (make-roster C1 (list S2 S1)))
+	(define SR1 (list (make-roster C1 (list S1))))
+	(define SR2-1
+	  (list (make-roster C1 (list S1 S2)) (make-roster C2 (list S3 S4))))
+	(define SR2-2
+	  (list (make-roster C2 (list S4 S3)) (make-roster C1 (list S2 S1))))
+	(define SR3 (list (make-roster C3 (list S2 S5)) (make-roster C4 (list S2 S5))))
+
+Test Case: 
+  (test-false
+   "TC#9: different class rosters (class is not the same)"
+   (roster=? R1 R2))
+Test Result: Success
+
+Test Case: 
+  (test-false
+   "TC#10: different class rosters (set of student is not the same)"
+   (roster=? R1 R3))
+Test Result: Success
+
+Test Case: 
+  (test-true "TC#11: same class rosters" (roster=? R1 R4))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#12: same sets of class roster (different order)"
+   (rosterset=? SR2-1 SR2-2))
+Test Result: Success
+
+Test Case: 
+  (test-false "TC#13: different sets of class roster" (rosterset=? SR3 SR1))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#14: one class with one student"
+   (rosterset=? (enrollments-to-rosters SE1) SR1))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#15: two classes with different students"
+   (rosterset=? (enrollments-to-rosters SE2) SR2-2))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#16: two classes with the same students"
+   (rosterset=? (enrollments-to-rosters SE3) SR3))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#17: empty set of enrollments"
+   (enrollments-to-rosters empty)
+   empty)
+Test Result: Success
+
+
+Results for Suite rosters-tests:
+  Test Successes: 9
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 9/9
+Normalized Score: 15/15
+
+
+Overall Results:
+  Test Successes: 17
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 17/17
+Normalized Score: 15/15
+

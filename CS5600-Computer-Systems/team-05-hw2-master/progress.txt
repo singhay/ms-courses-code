@@ -1,0 +1,32 @@
+COURSE   : CS 5600 - Computer Systems Fall 2016
+TITLE    : Homework 2 - File System Implementation
+TEAM     : team-05-hw2
+MEMBERS  : Evan and Ayush
+DEADLINE : Nov. 25, 2016
+
+PROGRESS:
+1. Added translate function to translate a path into the inode number of the 
+destination.
+2. Added fs_getattr function to get file or directory attributes.
+3. Added "todo" print statements in each of the functions as an aid to help 
+identify what function(s) need to be written in order for certain commands 
+to work.
+4. Halfway through with fs_readdir function to get directory contents which 
+would enable read-only command line access to fsx600 images.
+5. Created backlog of tasks on Trello, 
+test & debug would be picked up on fs_readdir is completed.
+
+WORKFLOW:
+1. Never commit to master, each of us would fork the master branch, make our
+own changes locally and create a Pull Request which would be merged only after
+code is reviewed thoroughly by the other team mate, enforcing a strong
+collaborative code evaluation system.
+2. Create issues on github with any wall we hit on a module so other could
+look at it and comment with a plausible solution.
+2. Trello Board to keep track of our work progress on a weekly basis.
+3. On class days, we plan on meeting up an hour before class to discuss ideas
+and questions that could not be answered online.
+
+REPO/BOARD:
+GIT   : https://github.ccs.neu.edu/cs5600-f16/team-05-hw2
+TRELLO: https://trello.com/b/AtsjsKjO/cs5600-f16-team-05-hw2

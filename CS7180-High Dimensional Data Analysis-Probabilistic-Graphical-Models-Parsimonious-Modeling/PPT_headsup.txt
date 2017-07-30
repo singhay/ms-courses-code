@@ -1,0 +1,10 @@
+- Motivation
+- Notations
+- Algorithm
+
+
+- Setting
+- Why difficult
+- General Idea
+- On board explain mathematically
+- Limitation

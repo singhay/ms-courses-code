@@ -1,0 +1,99 @@
+#lang racket
+
+;; displays as an outline rectangle with text showing the x and y
+;; coordinates and velocity along these coordinates of the particle.
+
+;; the rectangle is draggable
+
+;; left,right arrow keys decrements or increments x-coordinate of the particle
+;; by 5 up,down arrow keys decrements or increments y-coordinate of the
+;; particle by 5
+
+(require 2htdp/image)
+(require 2htdp/universe)
+(require "Interfaces.rkt")
+(require "Controller.rkt")
+
+(provide VelocityController%)
+
+(define VELOCITY-CHANGE-FACTOR 5)
+(define VELOCITY-CONTROLLER-WIDTH 210)
+(define VELOCITY-CONTROLLER-HEIGHT 60)
+
+;; a VelocityController% is a (new VelocityController% [model Model<%>])
+
+(define VelocityController%
+  (class* Controller% (Controller<%>)
+    (inherit-field model x y)  
+    (inherit-field particle-x particle-y particle-vx particle-vy)
+    (inherit-field handler-selected? controller-selected? saved-mx saved-my)
+
+    (define/override (width) VELOCITY-CONTROLLER-WIDTH)
+    (define/override (height) VELOCITY-CONTROLLER-HEIGHT)
+    
+    (super-new)
+    
+
+    ;; after-key-event: KeyEvent -> Void
+    ;; GIVEN: a keyevent
+    ;; EFFECT : the velocities of the particle changes with the arrow keys
+    ;; SRATEGY: cases on kev
+    
+    (define/override (after-key-event kev)
+      (if controller-selected?
+          (cond
+            [(key=? LEFT-KEY-EVENT kev)
+             (send model execute-command
+                   (make-incr-velocity (* -1 VELOCITY-CHANGE-FACTOR) 0))]
+            [(key=? RIGHT-KEY-EVENT kev)
+             (send model execute-command
+                   (make-incr-velocity VELOCITY-CHANGE-FACTOR 0))]
+            [(key=? UP-KEY-EVENT kev)
+             (send model execute-command
+                   (make-incr-velocity 0 (* -1 VELOCITY-CHANGE-FACTOR)))]
+            [(key=? DOWN-KEY-EVENT kev)
+             (send model execute-command
+                   (make-incr-velocity 0 VELOCITY-CHANGE-FACTOR)
+                   )])
+          3456))
+   
+  
+    ;; viewer-image->Image
+    ;; RETURNS:the image of teh position controller
+    ;; STRATEGY: Combining simpler functions
+    
+    (define/override (viewer-image)
+         (data-image))
+
+
+    ;; after-drag-inside-controller:No Functionality
+    (define/override (after-drag-inside-controller mx my)
+      "no functionality")
+    
+
+   ;; Data-image->Image
+    ;; RETURNS: a rectangle of a given width height displaying the  positions
+    ;; and velocity of the particle
+    ;; STRATEGY: Combining simpler functions
+    
+    (define (data-image)
+      (above
+       (text "Arrow keys change velocity" 10
+             (send this current-controller-color))
+       (text (string-append
+              "X = "
+              (real->decimal-string particle-x) " " 
+              " Y = "
+              (real->decimal-string particle-y))
+             12
+             (send this current-controller-color))
+       (text (string-append
+              "VX = "
+              (real->decimal-string particle-vx) " "
+              " VY = "
+              (real->decimal-string particle-vy))
+             12
+             (send this current-controller-color))))
+    
+    ))
+

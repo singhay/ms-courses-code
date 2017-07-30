@@ -1,0 +1,71 @@
+#lang racket
+
+(require "Interfaces.rkt")
+(require "VelocityController.rkt")
+(require "PositionController.rkt")
+(require "XController.rkt")
+(require "YController.rkt")
+(require "XYController.rkt")
+
+(require 2htdp/universe)
+
+(provide ControllerFactory%)
+
+;; a ControllerFactory% is a (new ControllerFactory% [model Model<%>]
+;;                            [w world])
+
+(define ControllerFactory%
+  (class* object% (SWidget<%>)
+
+    ; the world in which the controllers will live
+    (init-field w)   ; World<%>
+
+    ; the model to which the controllers will be connected
+    (init-field m)   ; Model<%>
+
+    (super-new)
+
+    ;; after-key-event: KeyEvent -> Void
+    ;; GIVEN: a keyevent
+    ;; EFFECT : a new controller is displayed depending on the keyevent
+    ;; SRATEGY: cases on kev
+    
+    (define/public (after-key-event kev)
+      (cond
+        [(key=? kev "p") (add-viewer PositionController%)]
+        [(key=? kev "v") (add-viewer VelocityController%)]
+        [(key=? kev "x") (add-viewer XController%)]
+        [(key=? kev "y") (add-viewer YController%)]
+        [(key=? kev "z") (add-viewer XYController%)]
+        ))
+
+    
+    ;; add-viewer: Class->Void
+    ;; GIVEN: a class
+    ;; EFFECT: send the object of the class to add widget
+    
+    (define/public (add-viewer viewer-class)
+      (send w add-widget (new viewer-class [model m])))
+
+    ;; add-to-scene:Scene->Scene
+    ;; RETURNS: the scene like the given one
+    ;; STRATEGY: Combine simpler fucntions
+    
+    (define/public (add-to-scene s) s)
+    
+
+   ;; Below methods do not have any functionality
+    
+    (define/public (after-tick)
+      'controller-factory-after-tick-trap)
+    (define/public (after-button-down mx my)
+      'controller-factory-after-button-down-trap)
+    (define/public (after-drag mx my)
+      'controller-factory-after-drag-trap)
+    (define/public (after-button-up mx my)
+      'controller-factory-after-button-up-trap)
+
+    ))
+
+
+

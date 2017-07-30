@@ -1,0 +1,201 @@
+PDP Test Report for set06
+
+
+Test Name: trees-tests
+Definitions:
+	(define INITIAL-WORLD (initial-world "Any"))
+	(define ONE-NODE-WORLD (world-after-key-event INITIAL-WORLD "t"))
+	(define SEL-ONE-NODE-WORLD
+	  (world-after-mouse-event ONE-NODE-WORLD 250 10 "button-down"))
+	(define MOVED-ONE-NODE-WORLD-SEL
+	  (world-after-mouse-event SEL-ONE-NODE-WORLD 300 50 "drag"))
+	(define MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL
+	  (world-after-key-event
+	   (world-after-key-event MOVED-ONE-NODE-WORLD-SEL "n")
+	   "n"))
+	(define MOVED-ONE-NODE-WORLD-TWO-CHILDREN
+	  (world-after-mouse-event
+	   MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL
+	   300
+	   50
+	   "button-up"))
+	(define MOVED-ONE-NODE-WORLD-ONE-CHILD
+	  (world-after-key-event
+	   (world-after-mouse-event
+	    MOVED-ONE-NODE-WORLD-TWO-CHILDREN
+	    330
+	    80
+	    "button-down")
+	   "d"))
+	(define MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL
+	  (world-after-key-event
+	   (world-after-key-event
+	    (world-after-mouse-event
+	     MOVED-ONE-NODE-WORLD-TWO-CHILDREN
+	     330
+	     80
+	     "button-down")
+	    "n")
+	   "n"))
+	(define FINAL-WORLD
+	  (world-after-key-event
+	   (world-after-mouse-event
+	    MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL
+	    100
+	    60
+	    "drag")
+	   "l"))
+	(define (run-script lst)
+	  (foldl (lambda (evt w) (world-after-key-event w evt)) (initial-world 1) lst))
+	(define SIRS-WORLD (run-script (list "t" "n" "n" "t" "n" "n" "n" "t" "t")))
+
+Test Case: 
+  (test-equal?
+   "TC#1: Initial World should have no roots"
+   (world-to-trees INITIAL-WORLD)
+   '())
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#2: Root created at (250, 10)"
+   (trees-to-center (world-to-trees ONE-NODE-WORLD))
+   (list (make-posn 250 10)))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#3: Dragging works"
+   (trees-to-center (world-to-trees MOVED-ONE-NODE-WORLD-SEL))
+   (list (make-posn 300 50)))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#4: Check if the sons are created in the correct location"
+   (and (= (length (world-to-trees MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL)) 1)
+        (my-member?
+         (make-posn 300 80)
+         (trees-to-center
+          (tree-to-sons
+           (first (world-to-trees MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL)))))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#5: Check if the sons are created in the correct location"
+   (and (= (length (world-to-trees MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL)) 1)
+        (my-member?
+         (make-posn 330 80)
+         (trees-to-center
+          (tree-to-sons
+           (first (world-to-trees MOVED-ONE-NODE-WORLD-TWO-CHILDREN-SEL)))))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#6: Check if one son deleted"
+   (and (= (length (world-to-trees MOVED-ONE-NODE-WORLD-ONE-CHILD)) 1)
+        (=
+         (length
+          (tree-to-sons (first (world-to-trees MOVED-ONE-NODE-WORLD-ONE-CHILD))))
+         1)))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#7: Check if grand sons created"
+   (and (=
+         (length (world-to-trees MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))
+         1)
+        (=
+         (length
+          (tree-to-sons
+           (first
+            (world-to-trees MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))
+         2)
+        (or (=
+             (length
+              (tree-to-sons
+               (second
+                (tree-to-sons
+                 (first
+                  (world-to-trees
+                   MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))))
+             2)
+            (=
+             (length
+              (tree-to-sons
+               (first
+                (tree-to-sons
+                 (first
+                  (world-to-trees
+                   MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))))
+             2))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#8: Check if grand sons created only on one node"
+   (and (=
+         (length (world-to-trees MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))
+         1)
+        (=
+         (length
+          (tree-to-sons
+           (first
+            (world-to-trees MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))
+         2)
+        (or (=
+             (length
+              (tree-to-sons
+               (second
+                (tree-to-sons
+                 (first
+                  (world-to-trees
+                   MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))))
+             0)
+            (=
+             (length
+              (tree-to-sons
+               (first
+                (tree-to-sons
+                 (first
+                  (world-to-trees
+                   MOVED-ONE-ROOT-TWO-CHILD-TWO-G-CHILD-WORLD-SEL))))))
+             0))))
+Test Result: Success
+
+Test Case: 
+  (test-true
+   "TC#9: All nodes on the left deleted"
+   (and (= (length (world-to-trees FINAL-WORLD)) 1)
+        (= (length (tree-to-sons (first (world-to-trees FINAL-WORLD)))) 1)))
+Test Result: Success
+
+Test Case: 
+  (test-equal?
+   "TC#10: Length of world needs to be 4"
+   (length (world-to-trees SIRS-WORLD))
+   4)
+Test Result: Success
+
+
+Results for Suite trees-tests:
+  Test Successes: 10
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 10/10
+Normalized Score: 15/15
+
+
+Overall Results:
+  Test Successes: 10
+  Test Failures: 0
+  Test Errors: 0
+
+Raw Score: 10/10
+Normalized Score: 15/15
+
+Updated Normalized Score 12/15 (-3 deductions - contract violations)

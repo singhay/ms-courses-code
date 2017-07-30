@@ -1,0 +1,413 @@
+%%Do not change font size
+\documentclass[12pt]{article}
+\usepackage{amsthm,amssymb,fullpage}
+
+\begin{document}
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+Fall '15 CS 5800 Algorithms \hspace{5cm} Hackerrank Group: singhay\\
+{\bfseries \large Problem Set 1}\\
+Surekha Jadhwani, Akash Singh, and Ayush K. Singh\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Part 1}
+\textbf{\large{Answers}}
+\begin{enumerate}
+\item
+\textbf{Given:} A program P which computes the function $f(n)=1 for$ for all $n \in N$ and an arbitrary program Q.\\
+\textbf{To Prove:} There exists another program R which determines whether P(n) = Q(n) for any input n.\\
+<<<<<<< HEAD
+\textbf{Proof:} By contradiction.\\
+Assume that a Program R exists which could determine equivalence of two programs.\\
+Now, consider a Program P which returns always 1 i.e. Program P is something like:\\
+\texttt{
+Program P\\
+return 1;\\
+end\\	}
+Now consider a Program R which takes input program Q and returns whether or not the programs are equal.\\
+\texttt{
+	Program R(Program Q)\\
+	return P == Q;\\
+	end\\}
+Say we pass program Q which works on an integer input into variable i and is as follows:\\
+\texttt{
+	Program Q(int i)\\
+	if (i == 1)\\
+	return 1;\\
+	else\\
+	loop forever;\\
+	end\\}
+Hence if a program Q in above format is passed, the program in many cases will never return an output. \\
+In fact, any program which does not halt, if passed as an input, equivalence cannot be deduced. \\
+For a program to be able to compute whether two programs are equal or not, the programs passed should always halt.\\
+But, since we can never say whether a program will halt or not as per the proof of halting problem, we know that a program which can be used to check equivalence cannot exist.\\
+\pagebreak
+\item {\textbf{Modular Arithmetic}}
+\begin{enumerate}
+\item {In a modulo 13 system, what is the multiplicative inverse of 15?}\\
+\textbf{Solution:} By Extended Euclidean Method\\
+Let x be the multiplicative inverse of 15 in modulo 13 system.\\
+=======
+\textbf{Proof:} We know that P(n) computes f(n) = 1. \\
+We can define program P as:\\
+        \begin{quote}
+        	define P(n):\\
+		    \begin{quote}
+		    return 1\\
+		    \end{quote}
+		\end{quote}    
+Let the program Q(n) be defined as follows:\\
+		\begin{quote}
+		define Q(n):\\
+			\begin{quote}
+		    P(n)\\
+		    return 1\\
+		    \end{quote}
+		\end{quote}    
+		
+Here, Program Q calls Program P(n) and returns 1 when P(n) halts for an input n. That is when Q(n) halts for an input otherwise it will run forever in infinite loop.\\
+If P(n) = Q(n), then Q(n) returns 1 for all inputs. This implies that P(n) halts for any given input which solves the halting problem. \\
+But, since, halting problem is undecidable, our assumption is contradicting.\\
+Therefore, we cannot determine conclusively whether two programs are equal or not.  \\
+
+
+\item {\textbf{Modular Arithmetic}}
+\begin{enumerate}
+\item {In a modulo 13 system, what is the multiplicative inverse of 15?}\\
+\textbf{Solution:} Let \quad x be the multiplicative inverse of 15 in a modulo 13 system.\\
+By Extended Euclidean Method\\
+>>>>>>> origin/master
+$ 13 = 15\cdot0 + 13\cdot1$\\
+$ 15 = 13\cdot1 + 2\cdot1$\\
+$ 13 = 2\cdot6 + 1$\\
+$ 13 - 2\cdot6 = 1$\\
+$ 13 - (15 - 13)\cdot6 = 13 + 13\cdot6 - 15 = 1$\\
+$ 13\cdot\textbf{7} - 15 = 1$\\
+$ \textbf{Answer:} \quad x = 7$
+
+\item {To what number between 0 and 12 inclusive is the product $3\cdot5\cdot11\cdot17\cdot23\cdot29\cdot31\cdot47\cdot53$
+congruent modulo 13? }\\
+$\textbf{Solution:} x \equiv (3\cdot5\cdot11\cdot17\cdot23\cdot29\cdot31\cdot47\cdot53) mod 13$ \\
+$ x mod 13 = (3\cdot5\cdot11\cdot17\cdot23\cdot29\cdot31\cdot47\cdot53) mod 13$\\
+$ x mod 13 = ((3 mod 13)(5 mod 13)(17 mod 13)(11 mod 13)(23 mod 13)(29 mod 13)..\\
+ \qquad ..(31 mod 13)(47 mod 13)(53 mod 13) mod 13)$\\
+$ x mod 13 = (3\cdot5\cdot4\cdot11\cdot10\cdot3\cdot5\cdot8\cdot1)mod13$\\
+$ x mod 13 = (15\cdot44\cdot30\cdot40)mod13$\\
+$ x mod 13 = (2\cdot5\cdot4\cdot1)mod13$\\
+$ x mod 13 = 40mod13$\\
+$ \textbf{Answer:} \quad x = 1$
+
+\item {Find the remainder when $19^{19}$ is divided by 11}\\
+$\textbf{Precompute:} \quad 19^{1}mod11 = 8$ \hfill (Equation 1)\\
+$19^{2}mod11 = (19^{1}mod11\cdot19^{1}mod11)mod11$\\
+$ = (8\cdot8)mod11 = 9$ \hfill [(from Eq. 1)(Equation 2)]\\
+$19^{4}mod11 = [19^{2}mod11\cdot19^{2}mod11]mod11 $\\
+$ = (9\cdot9)mod11 = 4$ \hfill [(from Eq. 2)(Equation 3)]\\
+$19^{8}mod11 = [19^{4}mod11\cdot19^{4}mod11]mod11 $\\
+$ = (4\cdot4)mod11 = 5$ \hfill [(from Eq. 3)(Equation 4)]\\
+$19^{16}mod11 = [19^{8}mod11\cdot19^{8}mod11]mod11 $\\
+$ = (5\cdot5)mod11 = 3$ \hfill [(from Eq. 4)(Equation 5)]\\
+\textbf{Solution:}We know that, $19^{19} = 19^{16}\cdot19^{2}\cdot19^{1}$
+Therefore from Eq. 1, Eq. 2, and Eq. 3, We can write\\
+$ 19^{19}mod11 = (19^{16}mod11\cdot19^{2}mod11\cdot19^{1}mod11)mod11$\\
+$= (8\cdot9\cdot3)mod11 = (8\cdot(9\cdot3))mod11$\\
+$= (8mod11\cdot27mod11)mod11$\\
+$= (8\cdot5)mod11$\\
+$= 40mod11$\\
+$\textbf{Answer:} \quad 19^{19}mod11= 7$
+\end{enumerate}
+\pagebreak
+\item { Solve the following using Mathematical Induction }
+\begin{enumerate}
+\item { For any integer $n \ge 0, 3|(2_{2n} - 1)$}\\
+\textbf{To Prove:} $3|(2_{2n} - 1) i.e (2^{2n} - 1)/3 = k$, an integer OR $(2^{2n} - 1) = 3k$ \\
+\textbf{Proof:} by Mathematical Induction \\
+Let $P(n)$ be $(2^{2n} - 1) = 3k$ \\
+\textbf{Basic Step:} for $n = 1$\\
+$P(1): (2^{2*1} - 1) = 3$\\
+\textbf{Induction Step:} Since $P(n)$ is true for $n = 1$, assuming its true for $P(n+1)$ \\
+$P(n+1): (2^{2(n+1)} - 1) = (2^{2n}.2^{2} - 1)$\\
+$P(n+1): [(3k + 1)2^{2} - 1] = 12k + 4 - 1 $\\
+$P(n+1): 12k + 3 = 3(4k + 1)$
+$P(n+1): = 3j$ \hfill [where j = 4k + 1]\\
+Hence Proved.
+
+\item {$\displaystyle{ 1 + \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots +  \frac{1}{\sqrt{n}} \le 2\sqrt{n}}$, for all $n \ge 1$}\\
+\textbf{To Prove:} {$\displaystyle{ 1 + \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots +  \frac{1}{\sqrt{n}} \le 2\sqrt{n}}$, for all $n \ge 1$}\\
+\textbf{Proof:} By Mathematical Induction \\
+Let $P(n)$ be {$\displaystyle{1 + \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots +  \frac{1}{\sqrt{n}} \le 2\sqrt{n}}$}\\
+\textbf{Basic Step:} For $n = 1$\\
+$P(1)$:  $\displaystyle{1 + \frac{1}{1}  \le 2\sqrt{1}}$\\
+$P(1)$: $\displaystyle{1 \le 1}$\\
+\textbf{Induction Step:} Since $P(n) $ is true for $ n = 1$, assuming its true for $P(n)$\\
+Solving for $P(n+1)$\\
+$P(n+1)$: {$\displaystyle{1 + \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots +  \frac{1}{\sqrt{n}} + \frac{1}{\sqrt{n+1}} \le 2\sqrt{n+1}}$}\\
+Replacing value for $P(n)$ in above expression\\
+$P(n+1)$: {$\displaystyle{2\sqrt{n} + \frac{1}{\sqrt{n+1}} \le 2\sqrt{n+1}}$}\\
+Multiplying both sides by $\displaystyle{\sqrt{n+1}}$\\
+$P(n+1)$: {$\displaystyle{2\sqrt{n}\sqrt{n+1}+ 1 \le 2(n+1)}$}\\
+$P(n+1)$: {$\displaystyle{2\sqrt{n^2 + n} + 1 \le 2n+2}$}\\
+Subtracting 1 from both sides\\
+$P(n+1)$: {$\displaystyle{2\sqrt{n^2 + n}  \le 2n+1}$}\\
+Squaring both sides\\
+$P(n+1)$: {$\displaystyle{4(n^2 +n) \le (2n+1)^2}$}\\
+$P(n+1)$: {$\displaystyle{4n^2 +4n \le 4n^2+4n+1}$}\\
+Canceling out common terms\\
+$P(n+1)$: $\displaystyle{0 \le 1}$\\
+Hence Proved.\\
+\pagebreak
+\item {Let n and k be non-negative integers with $n \ge k.$} \\
+\textbf{To Prove:} $\displaystyle{\sum^{n}_{i=k} {i \choose k} = {n+1 \choose k+1}}$, for $n,k \ge 0$ and $n \ge k$\\
+\textbf{Proof:} By Mathematical Induction\\
+Let $P(n)$ be $\displaystyle{\sum^{n}_{i=k} {i \choose k} = {n+1 \choose k+1}}$\\
+We know that $\displaystyle{{n \choose k} = {\frac{n!}{(n-k)!k!}}}$\\
+\textbf{Basic Step:} For k=1,n=2\\
+$P(1)$: $\displaystyle{\sum^{2}_{i=1} {i \choose 1} = {2+1 \choose 1+1}}$\\
+$P(1)$: $\displaystyle{{1 \choose 1} + {2 \choose 1}  = {3 \choose 2}}$\\
+$P(1)$: $\displaystyle{{\frac{1!}{0!1!}}+ {\frac{2!}{1!1!}} = {\frac{3!}{2!1!}}}$\\
+$P(1)$: $\displaystyle{{\frac{1}{1}} + {\frac{2}{1}} = {\frac{6}{2}}}$\\
+$P(1)$: $ 3 = 3$\\
+\textbf{Inductive Step:} Since $P(n)$ is true for $n = 1$, assuming its true for $P(n)$\\
+Solving for $P(n+1)$\\
+$P(n+1)$: $\displaystyle{\sum^{n+1}_{i=k} {i \choose k} = {n+1+1 \choose k+1}}$\\
+$P(n+1)$: $\displaystyle{\sum^{n}_{i=k} {i \choose k} + {n+1 \choose k} = {n+2 \choose k+1}}$\\
+Replacing value for $P(n)$ in above expression\\
+$P(n+1)$: $\displaystyle{{n+1 \choose k+1} + {n+1 \choose k} = {n+2 \choose k+1}}$\\
+$P(n+1)$: $\displaystyle{{\frac{(n+1)!}{(n+1-k-1)!(k+1)!}} + {\frac{(n+1)!}{(n+1-k)!k!}} = {\frac{(n+2)!}{(n+2-k-1)!(k+1)!}}}$\\  
+$P(n+1)$: $\displaystyle{{\frac{(n+1)!}{(n-k)!(k+1)!}} + {\frac{(n+1)!}{(n+1-k)!k!}} = {\frac{(n+2)!}{(n+1-k)!(k+1)!}}}$\\\\
+Simplifying by expanding factorial and equalizing denominators, we get\\
+$P(n+1)$: $\displaystyle{\frac{(n-k+1)(n+1)!}{(n-k+1)(n-k)!(k+1)k!} + \frac{(k+1)(n+1)!}{(n-k+1)(n-k)!(k+1)k!}}$\\ = $\displaystyle{\frac{(n+2)(n+1)!}{(n-k+1)(n-k)!(k+1)k!}}$\\ \\
+Canceling out common terms\\
+$P(n+1)$: $(n-k+1) + (k+1) = (n+2)$\\
+$P(n+1)$: $n+2 = n+2 \Rightarrow 0 = 0$\\
+Hence Proved.
+
+\end{enumerate}
+\pagebreak
+\item Functions in ascending order of growth rate \\
+\textbf{Solution:} Applying logarithms and simplifying given functions, we get:
+\begin{center}
+	\begin{tabular}{| l | c | r |}
+		\hline
+		No. & \textbf{g(x)} & \textbf{log(g(x)}) \\ \hline		
+		1 & $n^{101/100}$ & 1.01$\cdot$log $n$ \\ \hline
+		2 & $n\cdot2^{n+1}$ & log $n$ + ($n$+1)(log 2) \\ \hline
+		3 & $n(log $n$)^{3}$ & log $n$ + 3 $\cdot$ log (log $n$) \\ \hline
+		4 & $n$ log $n$ & log $n$ + log log $n$ \\ \hline
+		5 & $n^{log log n}$ & log log $n \cdot $log $n$  \\ \hline
+		6 & log($n^{2n}$) & log log $n^{2n}$ \\ \hline
+		7 & $n^{log n}$ & log $n \cdot$ log $n$ \\ \hline
+		8 & $2^{n}$ & $n \cdot$ log 2 \\ \hline
+		9 & $n\cdot2^{n}$ & log $n + n \cdot$ log 2 \\ \hline
+		10 & $2^{\sqrt{logn}}$ & log 2 $\cdot sqrt{log n}$ \\ \hline
+		11 & $2^{2^{n + 1}}$ & $2^{n+1} \cdot$ log 2 \\ \hline
+		12 & $e^{e^{n}}$ & $e^{n} \cdot $(log $e$) \\ \hline
+		13 & log($n!$) & log $n$ + log log $n$ \\ \hline
+		14 & $e^{log n}$ & log $n \cdot $log $e$ \\ \hline
+		15 & $2^{log(\sqrt{n})}$ & $\frac{1}{2} \cdot$ log 2 $\cdot$ log $n$ \\ \hline
+		16 & $\sqrt{2^{log n}}$ & $\frac{1}{2} \cdot$ log 2 $\cdot$ log $n$  \\ \hline
+		17 & $2^{n^{2}}$ & $n^{2} \cdot $log 2 \\ \hline
+		18 & $n!$ & $n$ log $n$ \\ \hline
+		19 & (log $n$)! & log $n \cdot$ log log $n$ \\ \hline
+		20 & log log $n$ & log log log $n$ \\ 								
+		\hline
+	\end{tabular}
+\end{center}
+By comparing log$(g(x))$ values for all given $g(x)$ from the above table, we get can write the functions in ascending order of complexity as follows:\\
+$g_{20} \textless
+g_{10} \textless
+g_{15} =
+g_{16} \textless
+g_{14} \textless
+g_{1} \textless
+g_{19} \textless
+g_{5} \le
+g_{13} \textless
+g_{4} \le
+g_{6} \textless
+g_{3} \textless
+g_{7} \textless
+g_{8} \textless
+g_{9} \textless
+g_{2} \textless
+g_{18} \textless
+g_{17} \textless
+g_{11} \textless
+g_{12}$
+
+\item {For a given two functions f, g and h. Decide whether each of the following statements
+are correct and give a proof for each part}
+\indent 
+\begin{enumerate}
+\item 
+{If $f(n) = \Omega(g(n))$ and $g(n) = \Omega(f(n))$, then $f(n) = \Theta(g(n))$.} \\
+\textbf{Solution:} The above statement is correct and the proof is as follows:\\            
+\textbf{Given:}  $f(n) = \Omega(g(n))$, $g(n) = \Omega(f(n))$     \\       
+\textbf{To Prove:} $f(n) = \Theta(g(n))$            \\
+\textbf{Proof:} We have $f(n) = \Omega(g(n))$ \\
+By definition of Big-Omega notation, it implies\\
+$\exists$ c$_{1}$$\textgreater$0, n$_{0}$ $\ge$ 0: $\forall$ n$\textgreater$n$_{0}$:\\  
+f(n) $\ge$ c$_{1}$g(n) 
+\hfill(Equation 1)\\
+
+Also, $g(n) = \Omega(f(n))$ \\
+i.e., $\exists$ c$_{2}\textgreater$0, n$_{0}$ $\ge$0: $\forall$ n$\textgreater$n$_{0}$: $g(n) \ge$ c2$f(n)$  \\            
+i.e., 1/c$_{2}$ * $(g(n)) \ge f(n)$ 
+\hfill [As c$_{2}$ $\textgreater$ 0]\\                                          
+Let 1/c$_{2}$ = c (some constant)\\
+Therefore, c$g(n) \ge f(n)$ \\
+\hfill (Equation 2)\\              
+From Equations (1) and (2), we get \\
+$\exists$ c$_{1}$$\textgreater$0, n$_{0}$ $\ge$0: $\forall$ n$\textgreater$n$_{0}$: \\
+$f(n) \ge c_{1}g(n)$
+\hfill (Equation 1)\\                         
+
+Also, $g(n) = \Omega(f(n))$ \\
+i.e., $\exists$ c$_{2}$$\textgreater$0, n$_{0}$ $\ge$0: $\forall$ n$\textgreater$n$_{0}$: $g(n) \ge$ c$2f(n)$              
+i.e., 1/c$_{2}$ * $(g(n)) \ge f(n)$
+\hfill [As c$_{2}$ $\textgreater$ 0]\\                                         
+Let 1/c$_{2}$ = c (some constant) \\
+Therefore, c$g(n) \ge f(n)$
+\hfill (Equation 2)\\
+
+From Equations (1) and (2), we get \\
+c$g(n) \ge f(n) \ge c_{1}g(n)$ where c, c$_{1}\textgreater$0            
+\hfill (Equation 3)\\        
+We know that, $f(n) = \Theta(g(n)) $\\
+iff  $\exists$ c$_{1}$,c$_{2} \textgreater$0, n$_{0}$ $\ge$0: $\forall$ n$\textgreater$n$_{0}$: c$_{1}$$g(n) \ge f(n)$ $\ge$ c$_{2}g(n)$
+\hfill (Equation 4)\\
+
+From equations (3) and (4), we conclude that given f(n) = $\Theta(g(n))$ if $f(n) = \Omega(g(n))$ and $g(n) = \Omega(f(n))$.
+Hence, proved.		
+
+\item 
+{If $f(n) = (g(n))$, then $g(n) \not \in O(f(n))$}\\
+\textbf{Solution:} The above statement is correct and the proof is as follows:\\            
+\textbf{Given:}  $f(n) = o(g(n))$ \\       
+\textbf{To Prove:} $g(n) \in O(f(n))$\\
+\textbf{Proof:} We have $f(n) = o(g(n))$ \\ 
+By definition of Little-o notation, it implies\\
+$\forall$ c$_{1}$ $\textgreater$ 0: $\exists$n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0} f(n) \textless$ c$_{1}$$g(n)$   \hfill (Equation 1) \\                        
+Let’s assume, $g(n) \in O(f(n))$ \\
+i.e., $\exists$c$_{2}\textgreater$0, n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0}$:  
+$g(n) \le$ c$_{2}f(n)$ \hfill (Equation 2)\\
+We can see that Equation (2) contradicts with Equation (1).\\
+Hence, Proving by contradiction $g(n) \not \in O(f(n))$ if $f(n) = o(g(n))$
+
+\item { If f(n) = O(h(n)) and g(n) = O(h(n)), then f(n) + g(n) = O(h(n))}\\
+\textbf{Solution:} The above statement is correct and the proof is as follows:\\            
+\textbf{Given:}  $f(n) = O(h(n))$ and $g(n) = O(h(n))$\\       
+\textbf{To Prove:} $f(n) + g(n) = O(h(n))$\\
+\textbf{Proof:} We have $f(n) = O(h(n))$ \\
+By definition, $\exists$ c$_{1}$$\textgreater$0, n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0}$: $f(n) \le$ c$_{1}$$h(n)$ \hfill (Equation 1)\\  
+Also, $g(n) = O(h(n))$ \\
+By definition, $\exists$ c$_{2}$$\textgreater$0, n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0}$: $f(n) \le$ c$_{2}$$h(n)$ \hfill (Equation 2)\\ 
+L.H.S. = $ f(n) + g(n) \le $c$_{1}h(n)$ + c$_{2}h(n) $\hfill [From 1 and 2]\\
+L.H.S. = (c$_{1}$ + c$_{2}$)$h(n)$\\
+L.H.S. = c$h(n)$ \hfill [where c = c$_{1}$ + c$_{2}$]\\
+Therefore, $f(n) + g(n) \le $ c$h(n)$ \\
+i.e. $f(n) + g(n) = O(h(n))$ Hence Proved.\\
+
+
+\item {If $f(n) = O(h(n))$ and $g(n) = O(h(n))$, then $f(n) \cdot g(n) = O(h(n))$} \\
+\textbf{Solution:} The above statement is incorrect and the proof is as follows:\\            
+\textbf{Given:}  $f(n) = O(h(n))$ and $g(n) = O(h(n))$\\       
+\textbf{To Prove:} $f(n)\cdot g(n) = O(h(n))$\\
+\textbf{Proof:} We have $f(n) = O(h(n))$ \\
+By definition, $\exists$ c$_{1}$$\textgreater$0, n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0}$: $f(n) \le$ c$_{1}$$h(n)$ \hfill (Equation 1)\\  
+Also, $g(n) = O(h(n))$ \\
+By definition, $\exists$ c$_{2}$$\textgreater$0, n$_{0}\ge$0: $\forall$ n$\textgreater$n$_{0}$: $f(n) \le$ c$_{2}$$h(n)$ \hfill (Equation 2)\\ 
+L.H.S. = $ f(n)\cdot g(n) \le $c$_{1}h(n)$$\cdot$c$_{2}h(n) $\hfill [From 1 and 2]\\
+L.H.S. = (c$_{1}$ $\cdot$ c$_{2}$)$h(n)^{2}$\\
+L.H.S. = c$h(n)^{2}$ \hfill [where c = c$_{1}$$\cdot$c$_{2}$]\\
+Therefore, $f(n) \cdot g(n) \le $ c$h(n)^{2} \hfill [h(n) \neq h(n)^{2}]$\\
+but $f(n)\cdot g(n) \textless O(h(n)^{2})$ Hence Statement is False.\\
+\end{enumerate}
+\item 
+{Justify and give the asymptotic upper and lower bounds for each of the following recurrences}
+\begin{enumerate}
+\item {$ T(n) = 3T(n/2) + n/logn $} \\
+\textbf{Solution:}  By Akra-Bazzi Method\cite{akba}.
+\begin{center}
+$ T(x) = g(x) + \Sigma^{k}_{i-1}a_{i}T(b_{i}x + h_{i}(x))$ for $x \ge x_{0}$
+\end{center}
+The conditions for usage are:
+\begin{itemize}
+	\item {sufficient base cases are provided}
+	\item {$a_{i}$ and $b_{i}$ are constants for all $i$}
+	\item {$a_{i}$ \textgreater for all $i$}
+	\item {$ 0 \textless b_{i} \textless 1 $ for all $i$}
+	\item {$\left|g(x)\right| \in O(x^{c})$, where c is a constant and O notates Big $O$ notation}
+	\item {$\left| h_{i}(x) \right| \in  \displaystyle{O\left(\frac{x}{(\log x)^{2}}\right)}$ for all $i$}
+	\item {$x_{0}$ is a constant}
+\end{itemize}
+The asymptotic behavior of T(x) is found by determining the value of p for which $ \displaystyle{\sum_{i=1}^{k} a_{i} b_{i}^{p} = 1}$ and plugging that value into the equation.
+\begin{center}
+	$ \displaystyle{T(x) \in \Theta \left( x^p\left( 1+\int_1^x \frac{g(u)}{u^{p+1}}du \right)\right)}$
+\end{center}
+Here, $a = 3,$ $b = \displaystyle{\frac{1}{2}},$ $g(u) = \displaystyle{\frac{n}{log n}},$ $p = ??$\\
+Applying that in our situation, $ \displaystyle{3\cdot\left(\frac{1}{2}\right)^{p} = 1} \Rightarrow p = 1.58496$\\
+Substituting in the above mentioned Equation, \\
+\begin{center}
+	$ \displaystyle{T(x) \in \Theta \left( x^{1.58496}\left( 1+\int_1^x \frac{u/log u}{u^{1.58496+1}}du \right)\right)}$
+\end{center}
+On Solving and Integrating the later part of above Equation for n we get,
+\begin{center}
+	$ \displaystyle{T(n) \in \Theta \left(n(log log n)\right)}$
+\end{center}
+Now we actually can't use the master method to solve this recurrence relation\cite{rr} because of non polynomial difference between $f(n)$ and $n^{log_{2}3}$. However, we can still derive an upper bound by finding a similar recurrence that is larger than T(n), analyze the new recurrence using the master method, and use the result as an upper bound for T(n).
+$ T(n) = 3T(n/2) + n/logn \le 3T(n/2) + n$, so if we call $S(n)$ the function such that $S(n)=3T(n/2)+ n$, we know that $S(n)\ge T(n)$. We can apply the master method to he function $S(n)$: $n$ is $\Theta(n)$, so $S(n)$ is $\Theta(n^{log_{2}3})$. But, as $T(n)\le S(n)$, we can conclude that $T(n)$ is $O(n^{log_{2}3})$. Here we can use only $O$ and not $\Theta$ as the function $S(n) \ge T(n)$; As we were only able apply the master method indirectly, we could show a tight bound if we use the result from Akra-Bazzi computed above and compare former [(3T(n/2)] and latter [n/logn] parts we get, \\
+\textbf{Answer:} Upper bound: $n^{log_{2}3}$, Lower Bound: $\left(n(log log n)\right)$
+
+\item {$ T(n) = \sqrt{n}T(\sqrt{n}) + n  $}\\
+\textbf{Solution:}  By Rolling-Unrolling Method.\\
+$ T(n) = n^{1/2}T(n^{1/2}) + cn $\\
+$= \displaystyle{n^{1/2}\left[ n^{1/4}T\left(n^{1/2}\right) + cn^{1/2} \right] + cn}$\\
+$= \displaystyle{n^{1/2 + 1/4}T\left(n^{1/2}\right) + cn^{1/2 + 1/2} + cn}$\\
+$= \displaystyle{n^{1/2 + 1/4}T\left(n^{1/8}\right) + cn^{1/4} + 2cn}$\\
+$= \displaystyle{n^{1/2 + 1/4 + 1/8}T\left(n^{1/8}\right) + 3cn}$\\
+$...$\\
+$= \displaystyle{n^(1-1/2^{k}) T(n^{1/2^{k}}) + kcn }$\\
+$=...$ let $k = $log log $n$ so $2^{k}$ = log $n$ and $n^{2-k} = n^{1/logn} = 2 ...$\\
+$= \displaystyle{n/2T(2) + cn }$loglog $n$ \hfill ($O(n/2) \textless O(n$loglog$n))$\\
+$= \displaystyle{\Theta(nloglogn)}$\\
+\textbf{Answer:} Upper and Lower Bound: $nloglogn$
+\pagebreak
+\item {$ T(n) = 3T(n - 1)  $}\\
+\textbf{Solution:} By Rolling-Unrolling Method.\\
+Assuming base case $T(0)$ = constant c.
+$ T(n) = 3T(n - 1)  $ \hfill (Equation 1) \\
+Substituting T(n) with T(n-1) in Equation 1\\
+$ = 3[ 3T((n - 1) - 1)] = 3^{2}T(n-2) $ \\
+$ = 3[3^{2}T((n-2) - 1)] = 3^{3}T(n-3) $ \\
+$\cdot$ \\
+$\cdot$ \\
+$= 3^{k}T(n - k) $\\
+Let $k = n \rightarrow 3^{n}T(0)$\\
+Since $T(0)$ is a constant by our assumption, so the complexity of the above recurrence relation turns out to be $\Theta(3^{n}).$ \\
+\textbf{Answer:} Upper Bound and Lower Bound: $3^{n}$
+
+\end{enumerate}
+
+\end{enumerate}
+
+\section{Part 2}
+\textbf{\large{Group Hackerrank Name: singhay }}
+\begin{enumerate}
+	\item Surekha Jadhwani : surekha@ccs.neu.edu / jadhwani.s@husky.neu.edu
+	\item Akash Singh : singhaka@ccs.neu.edu / singh.aka@husky.neu.edu
+	\item Ayush K. Singh : singhay@ccs.neu.edu / singh.ay@husky.neu.edu
+\end{enumerate}
+
+ \begin{thebibliography}{1}
+ 	
+ 	\bibitem{akba} Akra-Bazzi Method \texttt{https://en.wikipedia.org/wiki/Akra-Bazzi$\textunderscore$method}
+ 	
+ 	\bibitem{rr} Recurrence relations not solvable by the master method \texttt{http://www.cs.cornell.edu/courses/cs3110/2011sp/recitations/rec19.htm} 2011: CS3110 Recitations.
+ 	
+ \end{thebibliography}
+\end{document}
